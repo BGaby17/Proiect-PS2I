@@ -94,5 +94,8 @@
         <Line X1="0" X2="600" Grid.Row="8" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
         <Line X1="0" X2="600" Grid.Row="9" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>  
         <Line X1="0" X2="600" Grid.Row="10" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
+      <Line X1="0" X2="600" Grid.Row="10" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
+      <Line X1="0" X2="600" Grid.Row="10" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
+
     </Grid>  
 </UserControl>
