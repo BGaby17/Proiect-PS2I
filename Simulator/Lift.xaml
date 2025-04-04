@@ -40,33 +40,41 @@
             <ColumnDefinition Width="75" />
         </Grid.ColumnDefinitions>
 
-        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="10">
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="1" Visibility="{Binding Lift_E4}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="2" Visibility="{Binding Lift_E4_E3}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="3" Visibility="{Binding Lift_E3}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="4" Visibility="{Binding Lift_E3_E2}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="5" Visibility="{Binding Lift_E2}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="6" Visibility="{Binding Lift_E2_E1}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="7" Visibility="{Binding Lift_E1}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="8" Visibility="{Binding Lift_E1_E0}" ></Rectangle>
+        <Rectangle Fill="Black" Width="65" Height="65" Grid.Column="2" Grid.Row="9" Visibility="{Binding Lift_E0}" ></Rectangle>
 
-        </Rectangle>
-        <Rectangle Fill="Yellow" Width="45" Height="45" Grid.Column="2" Grid.Row="10" IsEnabled="{Binding ISOpan}">
-            
-        </Rectangle>
-
-
-        <Button Grid.Column="6" Grid.Row="1" Background="Black" Margin="10">
+        <Rectangle Fill="Yellow" Width="45" Height="45" Grid.Column="2" Grid.Row="1" Visibility="{Binding Use_E4}"></Rectangle>
+        <Rectangle Fill="Yellow" Width="45" Height="45" Grid.Column="2" Grid.Row="3" Visibility="{Binding Use_E3}"></Rectangle>
+        <Rectangle Fill="Yellow" Width="45" Height="45" Grid.Column="2" Grid.Row="5" Visibility="{Binding Use_E2}"></Rectangle>
+        <Rectangle Fill="Yellow" Width="45" Height="45" Grid.Column="2" Grid.Row="7" Visibility="{Binding Use_E1}"></Rectangle>
+        <Rectangle Fill="Yellow" Width="45" Height="45" Grid.Column="2" Grid.Row="9" Visibility="{Binding Use_E0}"></Rectangle>
+        
+        <Button Grid.Column="6" Grid.Row="1" Background="Black" Margin="10" IsEnabled="{Binding ProcesStart}" Click="Button_Start" >
             <TextBlock Text="Start" Foreground="White" FontSize="20"></TextBlock>
         </Button>
-        <Button Grid.Column="7" Grid.Row="1" Background="Black" Margin="10">
+        <Button Grid.Column="7" Grid.Row="1" Background="Black" Margin="10" Click="Button_Stop">
             <TextBlock Text="Stop" Foreground="White" FontSize="20"></TextBlock>
         </Button>
-        <Button Grid.Column="6" Grid.Row="2" Background="Black" Margin="10">
+        <Button Grid.Column="6" Grid.Row="2" Background="Black" Margin="10" Click="Button_Continu">
             <TextBlock Text="S5" Foreground="White" FontSize="20"> </TextBlock>
         </Button>
-        <Button Grid.Column="6" Grid.Row="3" Background="Black" Margin="10">
+        <Button Grid.Column="6" Grid.Row="3" Background="Black" Margin="10" IsEnabled="{Binding ButtonEnabled}" Click="Button_Etajul4">
             <TextBlock Text="S4" Foreground="White" FontSize="20"></TextBlock>
         </Button>
-        <Button Grid.Column="6" Grid.Row="4" Background="Black" Margin="10">
+        <Button Grid.Column="6" Grid.Row="4" Background="Black" Margin="10" IsEnabled="{Binding ButtonEnabled}" Click="Button_Etajul3">
             <TextBlock Text="S3" Foreground="White" FontSize="20"></TextBlock>
         </Button>
-        <Button Grid.Column="6" Grid.Row="5" Background="Black" Margin="10">
+        <Button Grid.Column="6" Grid.Row="5" Background="Black" Margin="10" IsEnabled="{Binding ButtonEnabled}" Click="Button_Etajul2">
             <TextBlock Text="S2" Foreground="White" FontSize="20"></TextBlock>
         </Button>
-        <Button Grid.Column="6" Grid.Row="6" Background="Black" Margin="10">
+        <Button Grid.Column="6" Grid.Row="6" Background="Black" Margin="10" IsEnabled="{Binding ButtonEnabled}" Click="Button_Etajul1">
             <TextBlock Text="S1" Foreground="White" FontSize="20"></TextBlock>
         </Button>
 
@@ -82,8 +90,6 @@
         <TextBlock Grid.Row="7" Text="Etaji 1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
         <TextBlock Grid.Row="9" Text="Parter" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
 
-        
-        
         <Line X1="0" X2="600" Grid.Row="1" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
         <Line X1="0" X2="600" Grid.Row="2" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
         <Line X1="0" X2="600" Grid.Row="3" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
@@ -94,8 +100,7 @@
         <Line X1="0" X2="600" Grid.Row="8" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
         <Line X1="0" X2="600" Grid.Row="9" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>  
         <Line X1="0" X2="600" Grid.Row="10" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
-      <Line X1="0" X2="600" Grid.Row="10" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
-      <Line X1="0" X2="600" Grid.Row="10" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>
+
 
     </Grid>  
 </UserControl>
