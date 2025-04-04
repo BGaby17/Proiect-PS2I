@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace DateModel
 {
-    internal enum ProcessState
+    public enum ProcessState
     {
         Urca,
         Coboara,
 
         Parter,
+        Etaji1,
         Etaji2,
         Etaji3,
         Etaji4,
 
-        Stop
+        Stop,
+        Pornit
     }
 }
