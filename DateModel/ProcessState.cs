@@ -8,16 +8,15 @@ namespace DateModel
 {
     public enum ProcessState
     {
-        Urca,
-        Coboara,
-
-        Parter,
-        Etaji1,
-        Etaji2,
-        Etaji3,
-        Etaji4,
-
-        Stop,
-        Pornit
+        GoingUp,
+        GoingDown,
+        GroundFloor,
+        Floor1,
+        Floor2,
+        Floor3,
+        Floor4,
+        Stopped,
+        Running
     }
+
 }

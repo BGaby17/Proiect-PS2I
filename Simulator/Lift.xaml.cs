@@ -23,6 +23,8 @@ namespace Simulator
     {
 
         LiftViewModel _lift;
+        //public bool _ButtonEnabled, _ButtonEnabledFloor1, _ButtonEnabledFloor2, _ButtonEnabledFloor3, _ButtonEnabledFloor4;
+
         public Lift()
         {
             InitializeComponent();
@@ -33,36 +35,39 @@ namespace Simulator
         private void Button_Start(object sender, RoutedEventArgs e)
         {
             _lift.Init();
+            
         }
 
         private void Button_Stop(object sender, RoutedEventArgs e)
         {
-            _lift.ForceNextState(ProcessState.Stop);
+            _lift.ForceNextState(ProcessState.Stopped);
         }
 
         private void Button_Continu(object sender, RoutedEventArgs e)
         {
-            _lift.ForceNextState(ProcessState.Pornit);
+            _lift.ForceNextState(ProcessState.Running);
         }
 
         private void Button_Etajul1(object sender, RoutedEventArgs e)
         {
+            _lift.ForceNextState(ProcessState.Floor1);
 
         }
 
         private void Button_Etajul2(object sender, RoutedEventArgs e)
         {
+            _lift.ForceNextState(ProcessState.Floor2);
 
         }
 
         private void Button_Etajul3(object sender, RoutedEventArgs e)
         {
-
+            _lift.ForceNextState(ProcessState.Floor3);
         }
 
         private void Button_Etajul4(object sender, RoutedEventArgs e)
         {
-
+            _lift.ForceNextState(ProcessState.Floor4);
         }
     }
 }
