@@ -62,7 +62,7 @@
         <Button Grid.Column="7" Grid.Row="1" Background="Black" Margin="10"   IsEnabled="{Binding ProcessStop}" Click="Button_Stop">
             <TextBlock Text="Stop" Foreground="White" FontSize="20"></TextBlock>
         </Button>
-        <Button Grid.Column="6" Grid.Row="2" Background="Black" Margin="10,10,10,0"  IsEnabled="{Binding ProcesContinue}" Click="Button_Continu" Height="55" VerticalAlignment="Top">
+        <Button Grid.Column="6" Grid.Row="2" Background="Black" Margin="10,10,10,0"  IsEnabled="{Binding ProcessContinue}" Click="Button_Continuu" Height="55" VerticalAlignment="Top">
             <TextBlock Text="S5" Foreground="White" FontSize="20"></TextBlock>
         </Button>
         <Button Grid.Column="6" Grid.Row="3" Background="Black" Margin="10" IsEnabled="{Binding ButtonEnabledFloor4}" Click="Button_Etajul4">
@@ -78,16 +78,16 @@
             <TextBlock Text="S1" Foreground="White" FontSize="20"></TextBlock>
         </Button>
 
-        <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Grid.Column="7" Text="Continu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Grid.Column="7" Text="Continuu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
         <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Grid.Column="7" Text="Etajul 4" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
         <TextBlock Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="7" Text="Etajul 3" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
         <TextBlock Grid.ColumnSpan="2" Grid.Row="5" Grid.Column="7" Text="Etajul 2" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
         <TextBlock Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="7" Text="Etajul 1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
 
-        <TextBlock Grid.Row="1" Text="Etaji 4" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
-        <TextBlock Grid.Row="3" Text="Etaji 3" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
-        <TextBlock Grid.Row="5" Text="Etaji 2" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
-        <TextBlock Grid.Row="7" Text="Etaji 1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+        <TextBlock Grid.Row="1" Text="Etaj 4" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+        <TextBlock Grid.Row="3" Text="Etaj 3" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+        <TextBlock Grid.Row="5" Text="Etaj 2" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+        <TextBlock Grid.Row="7" Text="Etaj 1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
         <TextBlock Grid.Row="9" Text="Parter" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
 
         <Line X1="0" X2="600" Grid.Row="1" Grid.ColumnSpan="5" Stroke="Black" StrokeThickness="4"></Line>

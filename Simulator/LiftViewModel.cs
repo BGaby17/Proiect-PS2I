@@ -67,12 +67,12 @@ namespace Simulator
         public LiftViewModel()
         {
             ProcessStart = true;
-            ProcessStop = true;
-            ProcessContinue = true;
-            ButtonEnabledFloor1 = true;
-            ButtonEnabledFloor2 = true;
-            ButtonEnabledFloor3 = true;
-            ButtonEnabledFloor4 = true;
+            ProcessStop = false ;
+            ProcessContinue = false;
+            ButtonEnabledFloor1 = false;
+            ButtonEnabledFloor2 = false;
+            ButtonEnabledFloor3 = false;
+            ButtonEnabledFloor4 = false;
 
         }
 
@@ -81,7 +81,15 @@ namespace Simulator
             timer.Elapsed += _timer_Elapsed;
             worker.DoWork += _worker_DoWork;
             worker.RunWorkerAsync();
+            Lift_E0 = System.Windows.Visibility.Visible;
+            Use_E0 = System.Windows.Visibility.Visible;
             ProcesStart = false;
+            ProcessStop = true;
+            ProcessContinue = true;
+            ButtonEnabledFloor1 = true;
+            ButtonEnabledFloor2 = true;
+            ButtonEnabledFloor3 = true;
+            ButtonEnabledFloor4 = true;
         }
 
         private ProcessState _currentStateOfTheProcess = ProcessState.Running;
@@ -133,6 +141,8 @@ namespace Simulator
             }
         }
         
+
+        private bool _floor1=false,_floor2 = false, _floor3 = false, _floor4 = false;  // cu astea verific la ce etaj sunt inainte de apasa pe s5
         private void groundFloor()
         {
             Lift_E4 = System.Windows.Visibility.Hidden;
@@ -153,7 +163,7 @@ namespace Simulator
         }
         private async Task floor1()
         {
-            
+            _floor1 = true;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
             ButtonEnabledFloor3 = false;
@@ -165,6 +175,7 @@ namespace Simulator
             Lift_E2 = System.Windows.Visibility.Hidden;
             Lift_E2_E1 = System.Windows.Visibility.Hidden;
             Use_E0 = System.Windows.Visibility.Hidden;
+            await Task.Delay(1000);
             Lift_E0 = System.Windows.Visibility.Hidden;
             if (!_Lift_E1_E0)  // Verificăm dacă nu e deja vizibilă
             {
@@ -186,6 +197,7 @@ namespace Simulator
 
         private async Task floor2()
         {
+            _floor2 = true;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor3 = false;
             ButtonEnabledFloor4 = false;
@@ -194,6 +206,7 @@ namespace Simulator
             Lift_E2_E1 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
             Lift_E2_E1 = System.Windows.Visibility.Hidden;
+           // await Task.Delay(1000);
             Lift_E2 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
             Use_E2 = System.Windows.Visibility.Visible;
@@ -202,6 +215,7 @@ namespace Simulator
           
         private async Task floor3()
         {
+            _floor3 = true;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
             ButtonEnabledFloor4 = false;
@@ -221,7 +235,7 @@ namespace Simulator
         private async Task floor4()
         {
 
-
+            _floor4 = true;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
             ButtonEnabledFloor3 = false;
@@ -231,11 +245,142 @@ namespace Simulator
             await Task.Delay(1000);
             Lift_E4_E3 = System.Windows.Visibility.Hidden;
             Lift_E4 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
             Use_E4 = System.Windows.Visibility.Visible;
             Use_E3 = System.Windows.Visibility.Hidden;
 
         }
 
+        private async Task floor1_down()
+        {
+            _floor1 = false;
+            ButtonEnabledFloor1 = false;
+            ButtonEnabledFloor2 = false;
+            ButtonEnabledFloor3 = false;
+            ButtonEnabledFloor4 = false;
+           
+            Lift_E4 = System.Windows.Visibility.Hidden;
+            Lift_E4_E3 = System.Windows.Visibility.Hidden;
+            Lift_E3 = System.Windows.Visibility.Hidden;
+            Lift_E3_E2 = System.Windows.Visibility.Hidden;
+            Lift_E2 = System.Windows.Visibility.Hidden;
+            Lift_E2_E1 = System.Windows.Visibility.Hidden;
+            Lift_E0 = System.Windows.Visibility.Hidden;
+            Use_E1 = System.Windows.Visibility.Hidden;
+            await Task.Delay(1000);
+            Lift_E1 = System.Windows.Visibility.Hidden;
+            if (!_Lift_E1_E0)  // Verificăm dacă nu e deja vizibilă
+            {
+                Lift_E1_E0 = System.Windows.Visibility.Visible;
+                await Task.Delay(1000);
+                Lift_E1_E0 = System.Windows.Visibility.Hidden;
+            }
+
+            Lift_E0 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
+            Use_E0 = System.Windows.Visibility.Visible;
+
+            Use_E4 = System.Windows.Visibility.Hidden;
+            Use_E3 = System.Windows.Visibility.Hidden;
+            Use_E2 = System.Windows.Visibility.Hidden;
+
+        }
+        private async Task floor2_down()
+        {
+            _floor2 = false;
+            Use_E1 = System.Windows.Visibility.Hidden;
+            Lift_E1 = System.Windows.Visibility.Hidden;
+            Use_E2 = System.Windows.Visibility.Hidden;
+            await Task.Delay(1000);
+            Lift_E2 = System.Windows.Visibility.Hidden;
+            Lift_E2_E1 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
+            Lift_E2_E1 = System.Windows.Visibility.Hidden;
+            Lift_E1 = System.Windows.Visibility.Visible;
+            //await Task.Delay(1000);
+           // Use_E1 = System.Windows.Visibility.Visible;
+            /*await Task.Delay(1000);
+            Use_E1 = System.Windows.Visibility.Hidden;*/
+        }
+
+        private async Task floor3_down()
+        {
+            _floor3 = false;
+            Use_E2 = System.Windows.Visibility.Hidden;
+            Lift_E2 = System.Windows.Visibility.Hidden;
+            Use_E3 = System.Windows.Visibility.Hidden;
+            await Task.Delay(1000);
+            Lift_E3 = System.Windows.Visibility.Hidden;
+            Lift_E3_E2 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
+            Lift_E3_E2 = System.Windows.Visibility.Hidden;
+            Lift_E2 = System.Windows.Visibility.Visible;
+
+        }
+
+        private async Task floor4_down()
+        {
+            _floor4 = false;
+            Use_E3 = System.Windows.Visibility.Hidden;
+            Lift_E3 = System.Windows.Visibility.Hidden;
+            Use_E4 = System.Windows.Visibility.Hidden;
+            await Task.Delay(1000);
+            Lift_E4 = System.Windows.Visibility.Hidden;
+            Lift_E4_E3 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
+            Lift_E4_E3 = System.Windows.Visibility.Hidden;
+            Lift_E3 = System.Windows.Visibility.Visible;
+
+        }
+        public async Task running()
+        {
+
+            if (_floor4 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                await floor4_down();
+                await floor3_down();
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (_floor3 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                await floor3_down();
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (_floor2 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                await floor2_down();
+                await floor1_down();
+            }
+            else
+                   if (_floor1 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                await floor1_down();
+
+
+            }
+
+            ProcessStart = false;
+            ButtonEnabledFloor1 = true;
+            ButtonEnabledFloor2 = true;
+            ButtonEnabledFloor3 = true;
+            ButtonEnabledFloor4 = true;
+        
+        }
+        public async Task stopped()
+        {
+            ProcessStop = true;
+            ProcessContinue = true;
+            ButtonEnabledFloor1 = true;
+            ButtonEnabledFloor2 = true;
+            ButtonEnabledFloor3 = true;
+            ButtonEnabledFloor4 = true;
+            Lift_E4 = System.Windows.Visibility.Visible;
+
+        }
+
+       
         public async Task ComputeNextStateAsync(ProcessState CurrentState)
         {
             switch (CurrentState)
@@ -244,36 +389,11 @@ namespace Simulator
 
                     ///aici nush cum sa gestionez situatia  ca e destul de nasta sa te bagi peste procesul in curs
                   //  ProcessStart = true;
-                     ProcessStop = true;
-                    ProcessContinue = true;
-                    ButtonEnabledFloor1 = true;
-                    ButtonEnabledFloor2 = true;
-                    ButtonEnabledFloor3 = true;
-                    ButtonEnabledFloor4 = true;
-                    Lift_E4 = System.Windows.Visibility.Visible;
+                 await   stopped();
                     break;
 
                 case ProcessState.Running:
-                    ProcessStart = false;
-                    ButtonEnabledFloor1 = true;
-                    ButtonEnabledFloor2 = true;
-                    ButtonEnabledFloor3 = true;
-                    ButtonEnabledFloor4 = true;
-                    Lift_E4 = System.Windows.Visibility.Hidden;
-                    Lift_E4_E3 = System.Windows.Visibility.Hidden;
-                    Lift_E3 = System.Windows.Visibility.Hidden;
-                    Lift_E3_E2 = System.Windows.Visibility.Hidden;
-                    Lift_E2 = System.Windows.Visibility.Hidden;
-                    Lift_E2_E1 = System.Windows.Visibility.Hidden;
-                    Lift_E1 = System.Windows.Visibility.Hidden;
-                    Lift_E1_E0 = System.Windows.Visibility.Hidden;
-                    Lift_E0 = System.Windows.Visibility.Visible;
-
-                    Use_E4 = System.Windows.Visibility.Hidden;
-                    Use_E3 = System.Windows.Visibility.Hidden;
-                    Use_E2 = System.Windows.Visibility.Hidden;
-                    Use_E1 = System.Windows.Visibility.Hidden;
-                    Use_E0 = System.Windows.Visibility.Visible;
+                 await running();
                     break;
 
                 case ProcessState.GroundFloor:
@@ -301,7 +421,7 @@ namespace Simulator
                     await floor2();
                     await floor3();
 
-                    ButtonEnabled = true;
+                  //  ButtonEnabled = true;
 
                     break;
 

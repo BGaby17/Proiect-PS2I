@@ -43,7 +43,7 @@ namespace Simulator
             _lift.ForceNextState(ProcessState.Stopped);
         }
 
-        private void Button_Continu(object sender, RoutedEventArgs e)
+        private void Button_Continuu(object sender, RoutedEventArgs e)
         {
             _lift.ForceNextState(ProcessState.Running);
         }
