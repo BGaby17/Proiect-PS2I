@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +25,7 @@ namespace Simulator
 
         LiftViewModel _lift;
         //public bool _ButtonEnabled, _ButtonEnabledFloor1, _ButtonEnabledFloor2, _ButtonEnabledFloor3, _ButtonEnabledFloor4;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public Lift()
         {
@@ -40,9 +42,10 @@ namespace Simulator
 
         private void Button_Stop(object sender, RoutedEventArgs e)
         {
-            _lift.ForceNextState(ProcessState.Stopped);
+           // _lift.ForceNextState(ProcessState.Stopped);
+            _lift.CancelTasks();
         }
-
+       
         private void Button_Continuu(object sender, RoutedEventArgs e)
         {
             _lift.ForceNextState(ProcessState.Running);
