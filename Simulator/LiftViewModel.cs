@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using DateModel;
@@ -35,7 +36,35 @@ namespace Simulator
         private System.Timers.Timer timer = new System.Timers.Timer();
         // private Sender _aplicatieMonitorizareRetea;
         private DispatcherTimer visibilityTimer;
-
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        public async Task CancelTasks()
+        {
+            _cancellationTokenSource.Cancel();
+            if (_floor4 == true  ) { 
+                await Task.Delay(1000);
+            Use_E4 = System.Windows.Visibility.Visible;
+            }
+           else if(_floor3 == true  && _floor43==false)
+            {
+                await Task.Delay(1000);
+                Use_E3 = System.Windows.Visibility.Visible;
+            }
+            else if (_floor2 == true && _floor32==false)
+            {
+                await Task.Delay(1000);
+                Use_E2 = System.Windows.Visibility.Visible;
+            }
+            else if (_floor1 == true && _floor21==false)
+            {
+                await Task.Delay(1000);
+                Use_E1 = System.Windows.Visibility.Visible;
+            }
+            else  if(_floor0 == true && _floor10 == false)
+            {
+                await Task.Delay(1000);
+                Use_E0 = System.Windows.Visibility.Visible;
+            }
+        }
 
         private double _liftOpacity = 1.0;
         public double LiftOpacity
@@ -140,9 +169,9 @@ namespace Simulator
             
             }
         }
-        
 
-        private bool _floor1=false,_floor2 = false, _floor3 = false, _floor4 = false;  // cu astea verific la ce etaj sunt inainte de apasa pe s5
+
+        private bool _floor0=false, _floor1 = false, _floor2 = false, _floor3 = false, _floor4 = false, _floor21 = false, _floor32 = false, _floor10 = false, _floor43 = false; // cu astea verific la ce etaj sunt inainte de apasa pe s5
         private void groundFloor()
         {
             Lift_E4 = System.Windows.Visibility.Hidden;
@@ -161,9 +190,9 @@ namespace Simulator
             Use_E1 = System.Windows.Visibility.Hidden;
             Use_E0 = System.Windows.Visibility.Visible;
         }
-        private async Task floor1()
+        private async Task floor1(CancellationToken cancellationToken)
         {
-            _floor1 = true;
+            _floor0 = false;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
             ButtonEnabledFloor3 = false;
@@ -175,17 +204,20 @@ namespace Simulator
             Lift_E2 = System.Windows.Visibility.Hidden;
             Lift_E2_E1 = System.Windows.Visibility.Hidden;
             Use_E0 = System.Windows.Visibility.Hidden;
-            await Task.Delay(1000);
+            await Task.Delay(1000, cancellationToken);
             Lift_E0 = System.Windows.Visibility.Hidden;
             if (!_Lift_E1_E0)  // Verificăm dacă nu e deja vizibilă
             {
                 Lift_E1_E0 = System.Windows.Visibility.Visible;
-                await Task.Delay(1000);
+                _floor10 = true;
+                await Task.Delay(1000, cancellationToken);
                 Lift_E1_E0 = System.Windows.Visibility.Hidden;
+                _floor10 = false;
+                _floor1 = true;
             }
 
             Lift_E1 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(1000, cancellationToken);
             Use_E4 = System.Windows.Visibility.Hidden;
             Use_E3 = System.Windows.Visibility.Hidden;
             Use_E2 = System.Windows.Visibility.Hidden;
@@ -195,57 +227,66 @@ namespace Simulator
 
         }
 
-        private async Task floor2()
+        private async Task floor2(CancellationToken cancellationToken)
         {
-            _floor2 = true;
+            _floor1 = false;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor3 = false;
             ButtonEnabledFloor4 = false;
             Use_E1 = System.Windows.Visibility.Hidden;
             Lift_E1 = System.Windows.Visibility.Hidden;
             Lift_E2_E1 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000);
+            _floor21 = true;
+            await Task.Delay(1000, cancellationToken);
             Lift_E2_E1 = System.Windows.Visibility.Hidden;
-           // await Task.Delay(1000);
+            _floor21 = false;
+            _floor2 = true;
+            // await Task.Delay(1000);
             Lift_E2 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(1000, cancellationToken);
             Use_E2 = System.Windows.Visibility.Visible;
             Use_E1 = System.Windows.Visibility.Hidden;
         }
           
-        private async Task floor3()
+        private async Task floor3(CancellationToken cancellationToken)
         {
-            _floor3 = true;
+            _floor2 = false;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
             ButtonEnabledFloor4 = false;
             Use_E2 = System.Windows.Visibility.Hidden;
             Lift_E2 = System.Windows.Visibility.Hidden;
             Lift_E3_E2 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000);
+            _floor32 = true;
+            await Task.Delay(1000, cancellationToken);
             Lift_E3_E2 = System.Windows.Visibility.Hidden;
+            _floor32 = false;
+            _floor3 = true;
             Lift_E3 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(1000, cancellationToken);
             Use_E3 = System.Windows.Visibility.Visible;
             Use_E2 = System.Windows.Visibility.Hidden;
 
         }
 
 
-        private async Task floor4()
+        private async Task floor4(CancellationToken cancellationToken)
         {
 
-            _floor4 = true;
+            _floor3 = false;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
             ButtonEnabledFloor3 = false;
             Use_E3 = System.Windows.Visibility.Hidden;
             Lift_E3 = System.Windows.Visibility.Hidden;
             Lift_E4_E3 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000);
+            _floor43 = true;
+            await Task.Delay(1000, cancellationToken);
             Lift_E4_E3 = System.Windows.Visibility.Hidden;
+            _floor43 = false;
+            _floor4 = true;
             Lift_E4 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000);
+            await Task.Delay(1000, cancellationToken);
             Use_E4 = System.Windows.Visibility.Visible;
             Use_E3 = System.Windows.Visibility.Hidden;
 
@@ -332,12 +373,29 @@ namespace Simulator
             Lift_E3 = System.Windows.Visibility.Visible;
 
         }
+
+        private async Task floor43_down()
+        {
+            _floor43 = false;
+           
+
+        }
         public async Task running()
         {
-
             if (_floor4 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor4_down();
+                await floor3_down();
+                await floor2_down();
+                await floor1_down();
+            }
+            
+          else if (_floor43 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                _floor43 = false;
+                Lift_E4_E3 = System.Windows.Visibility.Hidden;
+                Lift_E3 = System.Windows.Visibility.Visible;
+                // await Task.Delay(1000);
                 await floor3_down();
                 await floor2_down();
                 await floor1_down();
@@ -348,9 +406,36 @@ namespace Simulator
                 await floor2_down();
                 await floor1_down();
             }
+            else if (_floor32 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                _floor32 = false;
+                Lift_E3_E2 = System.Windows.Visibility.Hidden;
+                Lift_E2 = System.Windows.Visibility.Visible;
+                // await Task.Delay(1000);
+                await floor2_down();
+                await floor1_down();
+            }
             else if (_floor2 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor2_down();
+                await floor1_down();
+            }
+            else if (_floor21 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                _floor21 = false;
+                Lift_E2_E1 = System.Windows.Visibility.Hidden;
+                Lift_E1 = System.Windows.Visibility.Visible;
+                // await Task.Delay(1000);
+              //  await floor2_down();
+                await floor1_down();
+            }
+            else if (_floor10 == true && ProcessStart == false && ProcessContinue == true)
+            {
+                _floor10 = false;
+                Lift_E1_E0 = System.Windows.Visibility.Hidden;
+                Lift_E0 = System.Windows.Visibility.Visible;
+                // await Task.Delay(1000);
+                //  await floor2_down();
                 await floor1_down();
             }
             else
@@ -383,6 +468,10 @@ namespace Simulator
        
         public async Task ComputeNextStateAsync(ProcessState CurrentState)
         {
+
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
+
             switch (CurrentState)
             {
                 case ProcessState.Stopped:
@@ -404,32 +493,32 @@ namespace Simulator
 
                 case ProcessState.Floor1:
                     
-                    await floor1();
+                    await floor1(cancellationToken);
                    // ButtonEnabled = true;
                     break;
 
                 case ProcessState.Floor2:
                    
-                    await floor1();
-                    await floor2();
+                    await floor1(cancellationToken);
+                    await floor2(cancellationToken);
 
                    // ButtonEnabled = true;
                     break;
 
                 case ProcessState.Floor3:
-                    await floor1();
-                    await floor2();
-                    await floor3();
+                    await floor1(cancellationToken);
+                    await floor2(cancellationToken);
+                    await floor3(cancellationToken);
 
                   //  ButtonEnabled = true;
 
                     break;
 
                 case ProcessState.Floor4:
-                    await floor1();
-                    await floor2();
-                    await floor3();
-                    await floor4();
+                    await floor1(cancellationToken);
+                    await floor2(cancellationToken);
+                    await floor3(cancellationToken);
+                    await floor4(cancellationToken);
 
                   //  ButtonEnabled = true;
 
