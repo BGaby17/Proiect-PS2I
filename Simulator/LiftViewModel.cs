@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Communicator;
 using DateModel;
 
 namespace Simulator
@@ -37,6 +38,9 @@ namespace Simulator
         // private Sender _aplicatieMonitorizareRetea;
         private DispatcherTimer visibilityTimer;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+
+        private Sender _aplicatieMonitorizareRetea;
+       
         public async Task CancelTasks()
         {
             _cancellationTokenSource.Cancel();
@@ -85,6 +89,7 @@ namespace Simulator
             LiftOpacity = 0.5; // Reduce opacity
             visibilityTimer.Stop();
         }
+      
 
         public void ShowLiftElement(System.Windows.Visibility element)
         {
@@ -107,9 +112,13 @@ namespace Simulator
 
         public void Init()
         {
+            _aplicatieMonitorizareRetea = new Sender("127.0.0.1", 3000);
             timer.Elapsed += _timer_Elapsed;
             worker.DoWork += _worker_DoWork;
             worker.RunWorkerAsync();
+            timer.Elapsed += _timer_Elapsed;
+            worker.DoWork += _worker_DoWork;
+          //  worker.RunWorkerAsync();
             Lift_E0 = System.Windows.Visibility.Visible;
             Use_E0 = System.Windows.Visibility.Visible;
             ProcesStart = false;
@@ -129,6 +138,7 @@ namespace Simulator
             set
             {
                 _currentStateOfTheProcess = value;
+                _aplicatieMonitorizareRetea.Send(Convert.ToByte(_currentStateOfTheProcess));
             }
         }
 
@@ -160,13 +170,8 @@ namespace Simulator
         {
             while (true)
             {
-                if (_lastState != TheStateOfTheProcess)
-                {
-                    ComputeNextStateAsync(TheStateOfTheProcess);
-                    _lastState = TheStateOfTheProcess;
-                }
-               // System.Threading.Thread.Sleep(100);
-            
+                ComputeNextState(TheStateOfTheProcess);
+                System.Threading.Thread.Sleep(100);
             }
         }
 
@@ -466,7 +471,7 @@ namespace Simulator
         }
 
        
-        public async Task ComputeNextStateAsync(ProcessState CurrentState)
+        public async Task ComputeNextState(ProcessState CurrentState)
         {
 
             _cancellationTokenSource = new CancellationTokenSource();
@@ -477,28 +482,30 @@ namespace Simulator
                 case ProcessState.Stopped:
 
                     ///aici nush cum sa gestionez situatia  ca e destul de nasta sa te bagi peste procesul in curs
-                  //  ProcessStart = true;
-                 await   stopped();
+                    //  ProcessStart = true;
+                    ChangeProcessState(ProcessState.Stopped, 2000);
+                    await   stopped();
                     break;
 
                 case ProcessState.Running:
-                 await running();
+                    ChangeProcessState(ProcessState.Running, 2000);
+                    await running();
                     break;
 
                 case ProcessState.GroundFloor:
-                    
+                    ChangeProcessState(ProcessState.GroundFloor, 2000);
                     groundFloor();
                   //  ButtonEnabled = true;
                     break;
 
                 case ProcessState.Floor1:
-                    
+                    ChangeProcessState(ProcessState.Floor1, 2000);
                     await floor1(cancellationToken);
                    // ButtonEnabled = true;
                     break;
 
                 case ProcessState.Floor2:
-                   
+                    ChangeProcessState(ProcessState.Floor2, 2000);
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
 
@@ -506,6 +513,7 @@ namespace Simulator
                     break;
 
                 case ProcessState.Floor3:
+                    ChangeProcessState(ProcessState.Floor3, 2000);
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
                     await floor3(cancellationToken);
@@ -515,6 +523,7 @@ namespace Simulator
                     break;
 
                 case ProcessState.Floor4:
+                    ChangeProcessState(ProcessState.Floor4, 2000);
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
                     await floor3(cancellationToken);
