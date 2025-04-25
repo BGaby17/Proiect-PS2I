@@ -40,7 +40,23 @@ namespace Simulator
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         private Sender _aplicatieMonitorizareRetea;
-       
+        public void Init()
+        {
+            _aplicatieMonitorizareRetea = new Sender("127.0.0.1", 3000);
+          timer.Elapsed += _timer_Elapsed;
+            worker.DoWork += _worker_DoWork;
+             worker.RunWorkerAsync();
+          
+            Lift_E0 = System.Windows.Visibility.Visible;
+            Use_E0 = System.Windows.Visibility.Visible;
+            ProcesStart = false;
+            ProcessStop = true;
+            ProcessContinue = true;
+            ButtonEnabledFloor1 = true;
+            ButtonEnabledFloor2 = true;
+            ButtonEnabledFloor3 = true;
+            ButtonEnabledFloor4 = true;
+        }
         public async Task CancelTasks()
         {
             _cancellationTokenSource.Cancel();
@@ -110,27 +126,9 @@ namespace Simulator
 
         }
 
-        public void Init()
-        {
-            _aplicatieMonitorizareRetea = new Sender("127.0.0.1", 3000);
-            timer.Elapsed += _timer_Elapsed;
-            worker.DoWork += _worker_DoWork;
-            worker.RunWorkerAsync();
-            timer.Elapsed += _timer_Elapsed;
-            worker.DoWork += _worker_DoWork;
-          //  worker.RunWorkerAsync();
-            Lift_E0 = System.Windows.Visibility.Visible;
-            Use_E0 = System.Windows.Visibility.Visible;
-            ProcesStart = false;
-            ProcessStop = true;
-            ProcessContinue = true;
-            ButtonEnabledFloor1 = true;
-            ButtonEnabledFloor2 = true;
-            ButtonEnabledFloor3 = true;
-            ButtonEnabledFloor4 = true;
-        }
+      
 
-        private ProcessState _currentStateOfTheProcess = ProcessState.Running;
+       
 
         public ProcessState TheStateOfTheProcess
         {
@@ -165,15 +163,19 @@ namespace Simulator
 
         private ProcessState _lastState;
 
-
-        private void _worker_DoWork(object sender, DoWorkEventArgs e)
+        bool continueProcessing = true; // Variabilă de control
+        private ProcessState _currentStateOfTheProcess = ProcessState.Wait;
+        private async void _worker_DoWork(object sender, DoWorkEventArgs e)
         {
+           
+
             while (true)
             {
-                ComputeNextState(TheStateOfTheProcess);
-                System.Threading.Thread.Sleep(100);
+                await ComputeNextState(TheStateOfTheProcess);
+                
             }
         }
+
 
 
         private bool _floor0=false, _floor1 = false, _floor2 = false, _floor3 = false, _floor4 = false, _floor21 = false, _floor32 = false, _floor10 = false, _floor43 = false; // cu astea verific la ce etaj sunt inainte de apasa pe s5
@@ -196,7 +198,7 @@ namespace Simulator
             Use_E0 = System.Windows.Visibility.Visible;
         }
         private async Task floor1(CancellationToken cancellationToken)
-        {
+        {     
             _floor0 = false;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
@@ -220,14 +222,16 @@ namespace Simulator
                 _floor10 = false;
                 _floor1 = true;
             }
-
+            
             Lift_E1 = System.Windows.Visibility.Visible;
             await Task.Delay(1000, cancellationToken);
             Use_E4 = System.Windows.Visibility.Hidden;
             Use_E3 = System.Windows.Visibility.Hidden;
             Use_E2 = System.Windows.Visibility.Hidden;
             Use_E1 = System.Windows.Visibility.Visible;
-
+            TheStateOfTheProcess = ProcessState.Wait;
+          //  continueProcessing = false;
+            ChangeProcessState(ProcessState.Wait, 2000);
 
 
         }
@@ -299,6 +303,9 @@ namespace Simulator
 
         private async Task floor1_down()
         {
+            TheStateOfTheProcess = ProcessState.GroundFloor;
+            continueProcessing = true;
+            ChangeProcessState(ProcessState.GroundFloor,2000);
             _floor1 = false;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
@@ -329,7 +336,8 @@ namespace Simulator
             Use_E4 = System.Windows.Visibility.Hidden;
             Use_E3 = System.Windows.Visibility.Hidden;
             Use_E2 = System.Windows.Visibility.Hidden;
-
+          
+           
         }
         private async Task floor2_down()
         {
@@ -393,6 +401,7 @@ namespace Simulator
                 await floor3_down();
                 await floor2_down();
                 await floor1_down();
+                
             }
             
           else if (_floor43 == true && ProcessStart == false && ProcessContinue == true)
@@ -404,12 +413,14 @@ namespace Simulator
                 await floor3_down();
                 await floor2_down();
                 await floor1_down();
+                TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor3 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor3_down();
                 await floor2_down();
                 await floor1_down();
+                TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor32 == true && ProcessStart == false && ProcessContinue == true)
             {
@@ -419,11 +430,13 @@ namespace Simulator
                 // await Task.Delay(1000);
                 await floor2_down();
                 await floor1_down();
+                TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor2 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor2_down();
                 await floor1_down();
+                TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor21 == true && ProcessStart == false && ProcessContinue == true)
             {
@@ -433,6 +446,7 @@ namespace Simulator
                 // await Task.Delay(1000);
               //  await floor2_down();
                 await floor1_down();
+                TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor10 == true && ProcessStart == false && ProcessContinue == true)
             {
@@ -442,11 +456,15 @@ namespace Simulator
                 // await Task.Delay(1000);
                 //  await floor2_down();
                 await floor1_down();
+                TheStateOfTheProcess = ProcessState.Running;
             }
             else
                    if (_floor1 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor1_down();
+
+                
+
 
 
             }
@@ -479,6 +497,12 @@ namespace Simulator
 
             switch (CurrentState)
             {
+
+                case ProcessState.Wait:
+                   ////// deci aici nush cum sa fac , ar trebui sa ramane in starea de asteptare pana la urmatoare comanda,
+                   ///nu stiu cum sa foloses changeprocessstate uul
+                   ///
+                    break;
                 case ProcessState.Stopped:
 
                     ///aici nush cum sa gestionez situatia  ca e destul de nasta sa te bagi peste procesul in curs
@@ -493,19 +517,19 @@ namespace Simulator
                     break;
 
                 case ProcessState.GroundFloor:
-                    ChangeProcessState(ProcessState.GroundFloor, 2000);
-                    groundFloor();
+                   
+                   groundFloor();
                   //  ButtonEnabled = true;
                     break;
 
                 case ProcessState.Floor1:
-                    ChangeProcessState(ProcessState.Floor1, 2000);
+                   
                     await floor1(cancellationToken);
                    // ButtonEnabled = true;
                     break;
 
                 case ProcessState.Floor2:
-                    ChangeProcessState(ProcessState.Floor2, 2000);
+                    
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
 
@@ -513,7 +537,7 @@ namespace Simulator
                     break;
 
                 case ProcessState.Floor3:
-                    ChangeProcessState(ProcessState.Floor3, 2000);
+                   
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
                     await floor3(cancellationToken);
@@ -523,7 +547,7 @@ namespace Simulator
                     break;
 
                 case ProcessState.Floor4:
-                    ChangeProcessState(ProcessState.Floor4, 2000);
+                   
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
                     await floor3(cancellationToken);
