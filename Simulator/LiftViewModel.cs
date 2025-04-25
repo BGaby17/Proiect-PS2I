@@ -231,7 +231,7 @@ namespace Simulator
             Use_E3 = System.Windows.Visibility.Hidden;
             Use_E2 = System.Windows.Visibility.Hidden;
             Use_E1 = System.Windows.Visibility.Visible;
-            TheStateOfTheProcess = ProcessState.Wait;
+          //  TheStateOfTheProcess = ProcessState.Wait;
           //  continueProcessing = false;
             ChangeProcessState(ProcessState.Wait, 1000);
 
@@ -255,6 +255,7 @@ namespace Simulator
             // await Task.Delay(1000);
             Lift_E2 = System.Windows.Visibility.Visible;
             await Task.Delay(1000, cancellationToken);
+            ChangeProcessState(ProcessState.Wait, 1000);
             Use_E2 = System.Windows.Visibility.Visible;
             Use_E1 = System.Windows.Visibility.Hidden;
         }
@@ -332,8 +333,8 @@ namespace Simulator
 
             Lift_E0 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
-            TheStateOfTheProcess = ProcessState.GroundFloor;
-            continueProcessing = true;
+            //TheStateOfTheProcess = ProcessState.GroundFloor;
+            //continueProcessing = true;
             ChangeProcessState(ProcessState.GroundFloor, 1000);
             Use_E0 = System.Windows.Visibility.Visible;
 
@@ -417,14 +418,14 @@ namespace Simulator
                 await floor3_down();
                 await floor2_down();
                 await floor1_down();
-                TheStateOfTheProcess = ProcessState.Running;
+                //TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor3 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor3_down();
                 await floor2_down();
                 await floor1_down();
-                TheStateOfTheProcess = ProcessState.Running;
+               // TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor32 == true && ProcessStart == false && ProcessContinue == true)
             {
@@ -434,13 +435,13 @@ namespace Simulator
                 // await Task.Delay(1000);
                 await floor2_down();
                 await floor1_down();
-                TheStateOfTheProcess = ProcessState.Running;
+            //    TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor2 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor2_down();
                 await floor1_down();
-                TheStateOfTheProcess = ProcessState.Running;
+               // TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor21 == true && ProcessStart == false && ProcessContinue == true)
             {
@@ -450,7 +451,7 @@ namespace Simulator
                 // await Task.Delay(1000);
               //  await floor2_down();
                 await floor1_down();
-                TheStateOfTheProcess = ProcessState.Running;
+               // TheStateOfTheProcess = ProcessState.Running;
             }
             else if (_floor10 == true && ProcessStart == false && ProcessContinue == true)
             {
@@ -460,7 +461,7 @@ namespace Simulator
                 // await Task.Delay(1000);
                 //  await floor2_down();
                 await floor1_down();
-                TheStateOfTheProcess = ProcessState.Running;
+                //TheStateOfTheProcess = ProcessState.Running;
             }
             else
                    if (_floor1 == true && ProcessStart == false && ProcessContinue == true)
@@ -511,7 +512,7 @@ namespace Simulator
 
                     ///aici nush cum sa gestionez situatia  ca e destul de nasta sa te bagi peste procesul in curs
                     //  ProcessStart = true;
-                    ChangeProcessState(ProcessState.Stopped, 2000);
+                    ChangeProcessState(ProcessState.Stopped, 1000);
                     await   stopped();
                     break;
 
