@@ -219,7 +219,8 @@ namespace Simulator
                 Lift_E1_E0 = System.Windows.Visibility.Visible;
                 _floor10 = true;
                 await Task.Delay(1000, cancellationToken);
-                ChangeProcessState(ProcessState.Floor1,1000);
+              //  if(etaj==ProcessState.Floor1)
+               // ChangeProcessState(ProcessState.Floor1,1000);
                 Lift_E1_E0 = System.Windows.Visibility.Hidden;
                 _floor10 = false;
                 _floor1 = true;
@@ -233,6 +234,7 @@ namespace Simulator
             Use_E1 = System.Windows.Visibility.Visible;
           //  TheStateOfTheProcess = ProcessState.Wait;
           //  continueProcessing = false;
+          if(etaj==ProcessState.Floor1)
             ChangeProcessState(ProcessState.Wait, 1000);
 
 
@@ -255,13 +257,18 @@ namespace Simulator
             // await Task.Delay(1000);
             Lift_E2 = System.Windows.Visibility.Visible;
             await Task.Delay(1000, cancellationToken);
+            if(etaj == ProcessState.Floor2)
             ChangeProcessState(ProcessState.Wait, 1000);
+            else
+                ChangeProcessState(ProcessState.GoingUp, 1000);
             Use_E2 = System.Windows.Visibility.Visible;
             Use_E1 = System.Windows.Visibility.Hidden;
         }
           
         private async Task floor3(CancellationToken cancellationToken)
         {
+
+            
             _floor2 = false;
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
@@ -276,6 +283,10 @@ namespace Simulator
             _floor3 = true;
             Lift_E3 = System.Windows.Visibility.Visible;
             await Task.Delay(1000, cancellationToken);
+            if(etaj==ProcessState.Floor3)
+            ChangeProcessState(ProcessState.Wait, 1000);
+            else
+                ChangeProcessState(ProcessState.GoingUp, 1000);
             Use_E3 = System.Windows.Visibility.Visible;
             Use_E2 = System.Windows.Visibility.Hidden;
 
@@ -299,11 +310,12 @@ namespace Simulator
             _floor4 = true;
             Lift_E4 = System.Windows.Visibility.Visible;
             await Task.Delay(1000, cancellationToken);
+            ChangeProcessState(ProcessState.Wait, 1000);
             Use_E4 = System.Windows.Visibility.Visible;
             Use_E3 = System.Windows.Visibility.Hidden;
 
         }
-
+        ProcessState etaj;
         private async Task floor1_down()
         {
            
@@ -354,6 +366,8 @@ namespace Simulator
             Lift_E2 = System.Windows.Visibility.Hidden;
             Lift_E2_E1 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
+            if(etaj==ProcessState.Floor2)
+            ChangeProcessState(ProcessState.GoingDown, 1000);
             Lift_E2_E1 = System.Windows.Visibility.Hidden;
             Lift_E1 = System.Windows.Visibility.Visible;
             //await Task.Delay(1000);
@@ -364,6 +378,7 @@ namespace Simulator
 
         private async Task floor3_down()
         {
+            ChangeProcessState(ProcessState.GoingDown, 1000);
             _floor3 = false;
             Use_E2 = System.Windows.Visibility.Hidden;
             Lift_E2 = System.Windows.Visibility.Hidden;
@@ -372,6 +387,8 @@ namespace Simulator
             Lift_E3 = System.Windows.Visibility.Hidden;
             Lift_E3_E2 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
+            if (etaj == ProcessState.Floor3)
+                ChangeProcessState(ProcessState.GoingDown, 1000);
             Lift_E3_E2 = System.Windows.Visibility.Hidden;
             Lift_E2 = System.Windows.Visibility.Visible;
 
@@ -387,6 +404,8 @@ namespace Simulator
             Lift_E4 = System.Windows.Visibility.Hidden;
             Lift_E4_E3 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
+            if (etaj == ProcessState.Floor3)
+                ChangeProcessState(ProcessState.GoingDown, 1000);
             Lift_E4_E3 = System.Windows.Visibility.Hidden;
             Lift_E3 = System.Windows.Visibility.Visible;
 
@@ -528,13 +547,13 @@ namespace Simulator
                     break;
 
                 case ProcessState.Floor1:
-                   
+                      etaj=ProcessState.Floor1;
                     await floor1(cancellationToken);
                    // ButtonEnabled = true;
                     break;
 
                 case ProcessState.Floor2:
-                    
+                    etaj = ProcessState.Floor2;
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
 
@@ -542,7 +561,7 @@ namespace Simulator
                     break;
 
                 case ProcessState.Floor3:
-                   
+                   etaj=ProcessState.Floor3;
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
                     await floor3(cancellationToken);
@@ -552,7 +571,7 @@ namespace Simulator
                     break;
 
                 case ProcessState.Floor4:
-                   
+                    etaj = ProcessState.Floor4;
                     await floor1(cancellationToken);
                     await floor2(cancellationToken);
                     await floor3(cancellationToken);
