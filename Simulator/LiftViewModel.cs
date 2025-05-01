@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using Communicator;
 using DateModel;
@@ -243,7 +244,6 @@ namespace Simulator
             {
                 if (ProcessStop)
                 {
-                    _floor1 = true;
                     stopped();
                 }
             }
@@ -296,7 +296,7 @@ namespace Simulator
                 // Task was canceled (e.g. user pressed Stop). Optionally log or handle it gracefully.
                 if (ProcessStop)
                 {
-                    _floor2 = true;
+
                     stopped();
                 }
             }
@@ -343,7 +343,6 @@ namespace Simulator
             {
                 if (ProcessStop)
                 {
-                    _floor3 = true;
                     stopped();
                 }
                     
@@ -393,7 +392,6 @@ namespace Simulator
             {
                 if (ProcessStop)
                 {
-                    _floor4 = true;
                     stopped();
                 }
             }
@@ -593,10 +591,35 @@ namespace Simulator
             ButtonEnabledFloor3 = false;
             ButtonEnabledFloor4 = false;
             //Lift_E4 = System.Windows.Visibility.Visible;
+            running2();
 
         }
 
-       
+        public async Task running2()
+        {
+            if(Lift_E4_E3 == Visibility.Visible)
+            {
+               _floor43= true;
+                running();
+            }
+            if (Lift_E3_E2 == Visibility.Visible)
+            {
+                _floor32 = true;
+                running();
+            }
+            if (Lift_E2_E1 == Visibility.Visible)
+            {
+                _floor21 = true;
+                running();
+            }
+            if (Lift_E1_E0 == Visibility.Visible)
+            {
+                _floor10 = true;
+                running();
+            }
+        }
+
+
         public async Task ComputeNextState(ProcessState CurrentState)
         {
 
