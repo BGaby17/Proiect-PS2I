@@ -241,7 +241,11 @@ namespace Simulator
             }
             catch (TaskCanceledException)
             {
-
+                if (ProcessStop)
+                {
+                    _floor1 = true;
+                    stopped();
+                }
             }
 
         }
@@ -290,6 +294,11 @@ namespace Simulator
             catch (TaskCanceledException)
             {
                 // Task was canceled (e.g. user pressed Stop). Optionally log or handle it gracefully.
+                if (ProcessStop)
+                {
+                    _floor2 = true;
+                    stopped();
+                }
             }
         }
 
@@ -332,6 +341,12 @@ namespace Simulator
                 }
             catch(TaskCanceledException)
             {
+                if (ProcessStop)
+                {
+                    _floor3 = true;
+                    stopped();
+                }
+                    
 
             }
         }
@@ -376,7 +391,11 @@ namespace Simulator
             }
             catch(TaskCanceledException)
             {
-
+                if (ProcessStop)
+                {
+                    _floor4 = true;
+                    stopped();
+                }
             }
         }
 
@@ -569,11 +588,11 @@ namespace Simulator
         {
             ProcessStop = true;
             ProcessContinue = true;
-            ButtonEnabledFloor1 = true;
-            ButtonEnabledFloor2 = true;
-            ButtonEnabledFloor3 = true;
-            ButtonEnabledFloor4 = true;
-            Lift_E4 = System.Windows.Visibility.Visible;
+            ButtonEnabledFloor1 = false;
+            ButtonEnabledFloor2 = false;
+            ButtonEnabledFloor3 = false;
+            ButtonEnabledFloor4 = false;
+            //Lift_E4 = System.Windows.Visibility.Visible;
 
         }
 
