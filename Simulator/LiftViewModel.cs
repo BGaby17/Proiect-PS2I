@@ -39,7 +39,7 @@ namespace Simulator
         // private Sender _aplicatieMonitorizareRetea;
         private DispatcherTimer visibilityTimer;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-
+        private bool IsContinuePressed = false;
         private Sender _aplicatieMonitorizareRetea;
         public void Init()
         {
@@ -242,10 +242,10 @@ namespace Simulator
             }
             catch (TaskCanceledException)
             {
-                if (ProcessStop)
-                {
-                    stopped();
-                }
+               
+
+                stopped();
+                
             }
 
         }
@@ -293,12 +293,11 @@ namespace Simulator
             }
             catch (TaskCanceledException)
             {
-                // Task was canceled (e.g. user pressed Stop). Optionally log or handle it gracefully.
-                if (ProcessStop)
-                {
+             
 
-                    stopped();
-                }
+
+                stopped();
+                
             }
         }
 
@@ -341,10 +340,11 @@ namespace Simulator
                 }
             catch(TaskCanceledException)
             {
-                if (ProcessStop)
-                {
-                    stopped();
-                }
+              
+
+
+                stopped();
+                
                     
 
             }
@@ -390,10 +390,10 @@ namespace Simulator
             }
             catch(TaskCanceledException)
             {
-                if (ProcessStop)
-                {
-                    stopped();
-                }
+               
+
+                stopped();
+                
             }
         }
 
@@ -493,14 +493,32 @@ namespace Simulator
 
         }
 
-        private async Task floor43_down()
-        {
-            _floor43 = false;
-           
-
-        }
+       
         public async Task running()
         {
+            ProcessStop = true;
+            if (Use_E4==Visibility.Visible)
+            {
+                await floor4_down();
+                await floor3_down();
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (Use_E3 == Visibility.Visible)
+            {
+                await floor3_down();
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (Use_E2 == Visibility.Visible)
+            {
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (Use_E1 == Visibility.Visible)
+            {
+                await floor1_down();
+            }
             if (_floor4 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor4_down();
@@ -569,7 +587,7 @@ namespace Simulator
             {
                 await floor1_down();
 
-                
+               
 
 
 
@@ -585,16 +603,60 @@ namespace Simulator
         public async Task stopped()
         {
             ProcessStop = true;
-            ProcessContinue = true;
+            ProcessContinue = true; // Dezactivăm Continue până la apăsare
             ButtonEnabledFloor1 = false;
             ButtonEnabledFloor2 = false;
             ButtonEnabledFloor3 = false;
             ButtonEnabledFloor4 = false;
-            //Lift_E4 = System.Windows.Visibility.Visible;
-            running2();
 
+            // Așteaptă până când butonul Continue este apăsat
+            while (!ProcessContinue)
+            {
+                await Task.Delay(100);
+            }
+
+
+            // După apăsarea butonului Continue
+            IsContinuePressed = false;
+            ProcessContinue = true;
+            ProcessStop = false;
+
+            // Reactivăm butoanele de etaj
+            ButtonEnabledFloor1 = true;
+            ButtonEnabledFloor2 = true;
+            ButtonEnabledFloor3 = true;
+            ButtonEnabledFloor4 = true;
+
+            // Setăm starea de așteptare
+            /*if (_floor4)
+            {
+                await floor4_down();
+                await floor3_down();
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (_floor3)
+            {
+                await floor3_down();
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (_floor2)
+            {
+                await floor2_down();
+                await floor1_down();
+            }
+            else if (_floor1)
+            {
+                await floor1_down();
+            }*/
+
+            ChangeProcessState(ProcessState.Wait, 1000);
         }
-
+        public void OnContinueButtonPressed()
+        {
+            IsContinuePressed = true;
+        }
         public async Task running2()
         {
             if(Lift_E4_E3 == Visibility.Visible)
@@ -602,14 +664,29 @@ namespace Simulator
                _floor43= true;
                 running();
             }
+            if(Lift_E3 == Visibility.Visible)
+            {
+                _floor3 = true;
+                running();
+            }
             if (Lift_E3_E2 == Visibility.Visible)
             {
                 _floor32 = true;
                 running();
             }
+            if (Lift_E2 == Visibility.Visible)
+            {
+                _floor2 = true;
+                running();
+            }
             if (Lift_E2_E1 == Visibility.Visible)
             {
                 _floor21 = true;
+                running();
+            }
+             if(Lift_E1 == Visibility.Visible)
+            {
+                _floor1 = true;
                 running();
             }
             if (Lift_E1_E0 == Visibility.Visible)
@@ -638,7 +715,7 @@ namespace Simulator
 
                     // aici nush cum sa gestionez situatia  ca e destul de nasta sa te bagi peste procesul in curs
                     //  ProcessStart = true;
-                    ChangeProcessState(ProcessState.Stopped, 1000);
+                   // ChangeProcessState(ProcessState.Stopped, 1000);
                     await   stopped();
                     break;
 
