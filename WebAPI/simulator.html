@@ -3,39 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Simulator Web Interface</title>
+    <link rel="stylesheet" href="C:\Users\roxan\Desktop\Proiect-PS2I\WebAPI\style.css">
 </head>
 <body>
-    <h1>Simulator API Interface</h1>
+    <div class="container">
+        <h1>Simulator API Interface</h1>
 
-    <h2>Trimite un eveniment</h2>
-    <form id="sendForm">
-        <label>
-            Stare:
-            <select id="state">
-                <option value="GoingUp">GoingUp</option>
-                <option value="GoingDown">GoingDown</option>
-                <option value="GroundFloor">GroundFloor</option>
-                <option value="Floor1">Floor1</option>
-                <option value="Floor2">Floor2</option>
-                <option value="Floor3">Floor3</option>
-                <option value="Floor4">Floor4</option>
-                <option value="Stopped">Stopped</option>
-                <option value="Running">Running</option>
-                <option value="Wait">Wait</option>
-            </select>
-        </label>
-        <br>
-        <label>
-            Data și ora:
-            <input type="datetime-local" id="date" required>
-        </label>
-        <br>
-        <button type="submit">Trimite</button>
-    </form>
+        <h2>Trimite un eveniment</h2>
+        <form id="sendForm">
+            <label>
+                Stare:
+                <select id="state">
+                    <option value="GoingUp">GoingUp</option>
+                    <option value="GoingDown">GoingDown</option>
+                    <option value="GroundFloor">GroundFloor</option>
+                    <option value="Floor1">Floor1</option>
+                    <option value="Floor2">Floor2</option>
+                    <option value="Floor3">Floor3</option>
+                    <option value="Floor4">Floor4</option>
+                    <option value="Stopped">Stopped</option>
+                    <option value="Running">Running</option>
+                    <option value="Wait">Wait</option>
+                </select>
+            </label>
+            <label>doc
+                Data și ora:
+                <input type="datetime-local" id="date" required>
+            </label>
+            <button type="submit">Trimite</button>
+        </form>
 
-    <h2>Evenimente primite</h2>
-    <button onclick="toggleAutoReload()" id="reloadButton">Oprește reîncărcarea automată</button>
-    <ul id="events"></ul>
+        <h2>Evenimente primite</h2>
+        <button onclick="toggleAutoReload()" id="reloadButton">Oprește reîncărcarea automată</button>
+        <div class="events-box">
+            <ul id="events"></ul>
+        </div>
+    </div>
 
     <script>
         const apiUrl = "http://localhost:49570/api/simulator";
@@ -45,6 +48,7 @@
         document.getElementById('sendForm').onsubmit = async function (e) {
             e.preventDefault();
             const state = document.getElementById('state').value;
+
             const dateInput = document.getElementById('date').value;
             const data = {
                 state: state,
@@ -63,9 +67,25 @@
             const events = await res.json();
             const list = document.getElementById('events');
             list.innerHTML = '';
+
+            // Definim un obiect care mapează valorile numerice la numele stărilor
+            const stateNames = {
+                0: "GoingUp",
+                1: "GoingDown",
+                2: "GroundFloor",
+                3: "Floor1",
+                4: "Floor2",
+                5: "Floor3",
+                6: "Floor4",
+                7: "Stopped",
+                8: "Running",
+                9: "Wait"
+            };
+
             events.forEach(ev => {
                 const li = document.createElement('li');
-                li.textContent = `${ev.state} @ ${ev.stateChangedDate}`;
+                const stateName = stateNames[ev.state]; // Obține numele stării
+                li.textContent = `${stateName}`;
                 list.appendChild(li);
             });
         }

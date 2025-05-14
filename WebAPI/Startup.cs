@@ -18,6 +18,7 @@ namespace WebAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+           
         }
 
         public IConfiguration Configuration { get; }
@@ -43,10 +44,13 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+           
 
             app.UseAuthorization();
 
