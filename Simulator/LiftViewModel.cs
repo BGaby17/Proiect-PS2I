@@ -232,15 +232,6 @@ namespace Simulator
                 }
 
 
-                /*// Intermediate shaft
-                Lift_E1_E0 = System.Windows.Visibility.Visible;
-                _floor10 = true;
-                await Task.Delay(1000, cancellationToken);
-
-                // Arrived at floor 1
-                Lift_E1_E0 = System.Windows.Visibility.Hidden;
-                _floor10 = false;
-                _floor1 = true;*/
 
                 Lift_E1 = System.Windows.Visibility.Visible;
                 await Task.Delay(1000, cancellationToken);
@@ -339,7 +330,7 @@ namespace Simulator
 
             Lift_E4 = System.Windows.Visibility.Hidden;
             Lift_E4_E3 = System.Windows.Visibility.Hidden;
-            Lift_E3 = System.Windows.Visibility.Hidden;
+          //  Lift_E3 = System.Windows.Visibility.Hidden;
             Lift_E3_E2 = System.Windows.Visibility.Hidden;
             Use_E2 = System.Windows.Visibility.Hidden;
 
@@ -362,7 +353,7 @@ namespace Simulator
             Use_E4 = System.Windows.Visibility.Hidden;
             Use_E3 = System.Windows.Visibility.Visible;
 
-            if (etaj == ProcessState.Floor3)
+           // if (etaj == ProcessState.Floor3)
                 ChangeProcessState(ProcessState.Wait, 1000);
                 }
             catch(TaskCanceledException)
@@ -400,7 +391,7 @@ namespace Simulator
 
                 Lift_E4 = System.Windows.Visibility.Hidden;
                 Lift_E4_E3 = System.Windows.Visibility.Hidden;
-                Lift_E3 = System.Windows.Visibility.Hidden;
+               // Lift_E3 = System.Windows.Visibility.Hidden;   ///AICI FU PPRBL
                 Use_E3 = System.Windows.Visibility.Hidden;
 
                 await Task.Delay(1000, cancellationToken);
@@ -421,7 +412,7 @@ namespace Simulator
                 await Task.Delay(1000, cancellationToken);
                 Use_E4 = System.Windows.Visibility.Visible;
 
-                if (etaj == ProcessState.Floor4)
+               // if (etaj == ProcessState.Floor4)
                     ChangeProcessState(ProcessState.Wait, 1000);
             }
             catch(TaskCanceledException)
@@ -476,13 +467,12 @@ namespace Simulator
             Lift_E1_E0 = System.Windows.Visibility.Hidden;
             Lift_E0 = System.Windows.Visibility.Visible;
                await Task.Delay(1000);
-              if (etaj == ProcessState.Floor1)
-                  ChangeProcessState(ProcessState.GoingDown, 1000);
+            
              
-              ChangeProcessState(ProcessState.GroundFloor, 1000);
+             
                Use_E0 = System.Windows.Visibility.Visible;
-
-               Use_E4 = System.Windows.Visibility.Hidden;
+            ChangeProcessState(ProcessState.GroundFloor, 1000);
+            Use_E4 = System.Windows.Visibility.Hidden;
                Use_E3 = System.Windows.Visibility.Hidden;
                Use_E2 = System.Windows.Visibility.Hidden;
 
@@ -502,7 +492,7 @@ namespace Simulator
             Lift_E2 = System.Windows.Visibility.Hidden;
             Lift_E2_E1 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
-            if(etaj==ProcessState.Floor2)
+            //if(etaj==ProcessState.Floor2)
             ChangeProcessState(ProcessState.GoingDown, 1000);
             Lift_E2_E1 = System.Windows.Visibility.Hidden;
             Lift_E1 = System.Windows.Visibility.Visible;
@@ -525,7 +515,7 @@ namespace Simulator
             Lift_E3 = System.Windows.Visibility.Hidden;
             Lift_E3_E2 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
-            if (etaj == ProcessState.Floor3)
+           // if (etaj == ProcessState.Floor3)
                 ChangeProcessState(ProcessState.GoingDown, 1000);
             Lift_E3_E2 = System.Windows.Visibility.Hidden;
             Lift_E2 = System.Windows.Visibility.Visible;
