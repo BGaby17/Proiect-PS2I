@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulator Web Interface</title>
+</head>
+<body>
+    <h1>Simulator API Interface</h1>
+
+    <h2>Trimite un eveniment</h2>
+    <form id="sendForm">
+        <label>
+            Stare:
+            <select id="state">
+                <option value="GoingUp">GoingUp</option>
+                <option value="GoingDown">GoingDown</option>
+                <option value="GroundFloor">GroundFloor</option>
+                <option value="Floor1">Floor1</option>
+                <option value="Floor2">Floor2</option>
+                <option value="Floor3">Floor3</option>
+                <option value="Floor4">Floor4</option>
+                <option value="Stopped">Stopped</option>
+                <option value="Running">Running</option>
+                <option value="Wait">Wait</option>
+            </select>
+        </label>
+        <br>
+        <label>
+            Data și ora:
+            <input type="datetime-local" id="date" required>
+        </label>
+        <br>
+        <button type="submit">Trimite</button>
+    </form>
+
+    <h2>Evenimente primite</h2>
+    <button onclick="loadEvents()">Reîncarcă lista</button>
+    <ul id="events"></ul>
+
+    <script>const apiUrl = "http://localhost:49570/api/simulator"; // ajustează portul dacă e altul
+
+        document.getElementById('sendForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const state = document.getElementById('state').value;
+            const date = document.getElementById('date').value;
+            const data = {
+                state: state,
+                stateChangedDate: date
+            };
+            await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            loadEvents();
+        };
+
+        async function loadEvents() {
+            const res = await fetch(apiUrl);
+            const events = await res.json();
+            const list = document.getElementById('events');
+            list.innerHTML = '';
+            events.forEach(ev => {
+                const li = document.createElement('li');
+                li.textContent = `${ev.state} @ ${ev.stateChangedDate}`;
+                list.appendChild(li);
+            });
+        }
+
+        // Încarcă automat la deschidere
+        loadEvents();</script>
+</body>
+</html>
