@@ -34,18 +34,21 @@
     </form>
 
     <h2>Evenimente primite</h2>
-    <button onclick="loadEvents()">Reîncarcă lista</button>
+    <button onclick="toggleAutoReload()" id="reloadButton">Oprește reîncărcarea automată</button>
     <ul id="events"></ul>
 
-    <script>const apiUrl = "http://localhost:49570/api/simulator"; // ajustează portul dacă e altul
+    <script>
+        const apiUrl = "http://localhost:49570/api/simulator";
+        let autoReloadInterval;
+        let isAutoReloadEnabled = true;
 
-        document.getElementById('sendForm').onsubmit = async function(e) {
+        document.getElementById('sendForm').onsubmit = async function (e) {
             e.preventDefault();
             const state = document.getElementById('state').value;
-            const date = document.getElementById('date').value;
+            const dateInput = document.getElementById('date').value;
             const data = {
                 state: state,
-                stateChangedDate: date
+                stateChangedDate: new Date(dateInput).toISOString()
             };
             await fetch(apiUrl, {
                 method: 'POST',
@@ -67,7 +70,26 @@
             });
         }
 
-        // Încarcă automat la deschidere
-        loadEvents();</script>
+        function toggleAutoReload() {
+            const button = document.getElementById('reloadButton');
+            if (isAutoReloadEnabled) {
+                clearInterval(autoReloadInterval);
+                button.textContent = "Pornește reîncărcarea automată";
+                isAutoReloadEnabled = false;
+            } else {
+                startAutoReload();
+                button.textContent = "Oprește reîncărcarea automată";
+                isAutoReloadEnabled = true;
+            }
+        }
+
+        function startAutoReload() {
+            loadEvents(); // Încarcă imediat
+            autoReloadInterval = setInterval(loadEvents, 1000); // Reîncarcă la fiecare secundă
+        }
+
+        // Pornește reîncărcarea automată la încărcarea paginii
+        startAutoReload();
+    </script>
 </body>
 </html>

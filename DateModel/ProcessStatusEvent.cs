@@ -7,7 +7,7 @@ namespace DateModel
         public ProcessStatusEvent(ProcessState NewInfo, DateTime StateChangedDate)
         {
             State = NewInfo;
-            StateChangedDate = DateTime.Now;
+            this.StateChangedDate = StateChangedDate;
         }
 
         public ProcessStatusEvent() { }
