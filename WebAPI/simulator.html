@@ -219,6 +219,42 @@
             color: white;
             margin-bottom: 10px;
         }
+        .elevator.floor0 {
+            bottom: 0;
+        }
+
+        .elevator.between10 {
+            bottom: 75px;
+        }
+
+        .elevator.floor1 {
+            bottom: 150px;
+        }
+
+        .elevator.between21 {
+            bottom: 225px;
+        }
+
+        .elevator.floor2 {
+            bottom: 300px;
+        }
+
+        .elevator.between32 {
+            bottom: 375px;
+        }
+
+        .elevator.floor3 {
+            bottom: 450px;
+        }
+
+        .elevator.between43 {
+            bottom: 525px;
+        }
+
+        .elevator.floor4 {
+            bottom: 600px;
+        }
+
     </style>
 </head>
 <body>
@@ -369,6 +405,11 @@
                     li.textContent = `${stateName}`;
                     list.appendChild(li);
                 });
+                if (events.length > 0) {
+                    const lastEvent = events[events.length - 1];
+                    const lastState = stateNames[lastEvent.state];
+                    setElevatorPosition(lastState);
+                }
             }
 
             function toggleAutoReload() {
@@ -391,6 +432,64 @@
 
             // Pornește reîncărcarea automată la încărcarea paginii
             startAutoReload();
+
+
+
+
+
+            //aici vreau sa fac delasarea liftului
+            function setElevatorPosition(state) {
+                let currentFloorClass = 'floor0'
+                const elevator = document.getElementById('elevator');
+                const elevatorDoor = elevator.querySelector('.elevator-door');
+                // Șterge toate clasele de poziție
+                elevator.classList.remove(
+                    'floor0', 'floor1', 'floor2', 'floor3', 'floor4',
+                    'between10', 'between21', 'between32', 'between43'
+                );
+
+                // Poziționează liftul în funcție de stare
+                switch (state) {
+                    case 'GroundFloor':
+                        currentFloorClass = 'floor0'
+                        elevator.classList.add('floor0');
+                        elevatorDoor.classList.add('open');
+                        break;
+                    case 'Floor1':
+                        currentFloorClass = 'floor0'
+                        elevator.classList.add('floor1');
+                        elevatorDoor.classList.add('open');
+                        break;
+                    case 'Floor2':
+                        currentFloorClass = 'floor2'
+                        elevator.classList.add('floor2');
+                        break;
+                    case 'Floor3':
+                        currentFloorClass = 'floor3'
+                        elevator.classList.add('floor3');
+                        break;
+                    case 'Floor4':
+                        currentFloorClass = 'floor4'
+                        elevator.classList.add('floor4');
+                        break;
+                    case 'GoingUp':
+                        // Exemplu: între etajul curent și următorul (poți ajusta logica după nevoie)
+                        elevator.classList.add('between21');
+                        break;
+                    case 'GoingDown':
+                        // Exemplu: între etajul curent și precedentul (poți ajusta logica după nevoie)
+                        elevator.classList.add('between32');
+                        break;
+                }
+
+                // Ușa liftului: deschisă doar când e pe un etaj
+                if (state.startsWith('Floor') || state === 'GroundFloor') {
+                    elevatorDoor.classList.add('open');
+                } else {
+                    elevatorDoor.classList.remove('open');
+                }
+            }
+
         </script>
 </body>
 </html>
