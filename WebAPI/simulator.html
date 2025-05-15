@@ -2,92 +2,395 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simulator Web Interface</title>
-    <link rel="stylesheet" href="C:\Users\roxan\Desktop\Proiect-PS2I\WebAPI\style.css">
+    <title>Elevator Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+
+        .container {
+            display: flex;
+            justify-content: space-between; /* Spreads elements, control-panel in the middle */
+            align-items: center; /* Vertically centers elements */
+            width: 100%;
+            max-width: 1200px; /* Adjust as needed */
+            margin: 0 auto; /* Center container horizontally */
+        }
+
+        .control-panel {
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            flex: 0 1 auto; /* Take natural width */
+            text-align: center; /* Center buttons inside */
+        }
+
+        .floor-buttons, .control-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .element1, .element2 {
+            flex: 1; /* Take equal space on either side */
+            text-align: center; /* Optional: center content */
+            padding: 20px;
+            background-color: #f9f9f9; /* Optional: visual distinction */
+        }
+
+        .floor-btn, .control-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+        }
+
+            .floor-btn:hover, .control-btn:hover {
+                background-color: #ddd;
+            }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .layout {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .left-panel {
+            flex: 1;
+        }
+
+        .building {
+            width: 300px;
+            height: 700px;
+            background-color: #ddd;
+            position: relative;
+            border: 2px solid #999;
+            margin-bottom: 20px;
+        }
+
+        .floor {
+            height: 100px;
+            border-bottom: 2px solid #999;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        .between-floors {
+            height: 50px;
+            border-bottom: 1px dashed #999;
+            position: relative;
+        }
+
+        .floor-label {
+            font-weight: bold;
+            width: 60px;
+        }
+
+        .door {
+            width: 80px;
+            height: 120px;
+            background-color: #8B4513; /* Brown for closed door */
+            position: absolute;
+            right: 50px;
+            top: -20px;
+            transition: background-color 0.3s;
+        }
+
+            .door.open {
+                background-color: #CD853F; /* Lighter brown for open door */
+            }
+
+        .elevator {
+            width: 100px;
+            height: 120px;
+            background-color: #555;
+            position: absolute;
+            right: 40px;
+            bottom: 0;
+            transition: bottom 2s ease-in-out;
+        }
+
+        .elevator-door {
+            width: 80px;
+            height: 120px;
+            background-color: #666;
+            margin: 0 auto;
+            transition: background-color 0.3s;
+        }
+
+            .elevator-door.open {
+                background-color: #888;
+            }
+
+        .control-panel {
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            position:center;        }
+
+        .floor-buttons, .control-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            position:center;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .floor-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+            .floor-btn:hover {
+                background-color: #45a049;
+            }
+
+        .control-btn {
+            color: white;
+        }
+
+        .start {
+            background-color: #2196F3;
+        }
+
+        .stop {
+            background-color: #f44336;
+        }
+
+        .continue {
+            background-color: #ff9800;
+        }
+
+        .events-box {
+            flex: 1;
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        #events {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            #events li {
+                padding: 8px;
+                background-color: white;
+                margin-bottom: 5px;
+                border-radius: 4px;
+            }
+
+        #reloadButton {
+            background-color: #607d8b;
+            color: white;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
+    <h1>Elevator Simulator</h1>
     <div class="container">
-        <h1>Simulator API Interface</h1>
 
-        
 
-        <h2>Evenimente primite</h2>
-        <button onclick="toggleAutoReload()" id="reloadButton">Oprește reîncărcarea automată</button>
-        <div class="events-box">
-            <ul id="events"></ul>
+
+        <!-- Control buttons -->
+        <div class="container">
+
+            <div class="element1">
+                <div class="layout">
+                    <!-- Left panel with elevator -->
+                    <div class="left-panel">
+                        <div class="building">
+                            <!-- Floors and between-floors -->
+                            <div class="floor floor4">
+                                <div class="floor-label">Floor 4</div>
+                                <div class="door" id="door4"></div>
+                            </div>
+                            <div class="floor floor3">
+                                <div class="floor-label">Floor 43</div>
+                                <div class="door" id="between43"></div>
+                            </div>
+
+
+                            <div class="floor floor3">
+                                <div class="floor-label">Floor 3</div>
+                                <div class="door" id="door3"></div>
+                            </div>
+
+                            <div class="floor floor3">
+                                <div class="floor-label">Floor 32</div>
+                                <div class="door" id="between32"></div>
+                            </div>
+
+
+
+                            <div class="floor floor2">
+                                <div class="floor-label">Floor 2</div>
+                                <div class="door" id="door2"></div>
+                            </div>
+
+                            <div class="floor floor3">
+                                <div class="floor-label">Floor 21</div>
+                                <div class="door" id="between21"></div>
+                            </div>
+
+
+                            <div class="floor floor1">
+                                <div class="floor-label">Floor 1</div>
+                                <div class="door" id="door1"></div>
+                            </div>
+
+                            <div class="floor floor3">
+                                <div class="floor-label">Floor 10</div>
+                                <div class="door" id="between10"></div>
+                            </div>
+
+
+                            <div class="floor floor0">
+                                <div class="floor-label">Ground Floor</div>
+                                <div class="door" id="door0"></div>
+                            </div>
+
+                            <!-- Elevator -->
+                            <div class="elevator" id="elevator">
+                                <div class="elevator-door"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-panel">
+                        <div class="floor-buttons">
+                            <button onclick="sendCommand('Floor4')" class="floor-btn">Floor 4</button>
+                            <button onclick="sendCommand('Floor3')" class="floor-btn">Floor 3</button>
+                            <button onclick="sendCommand('Floor2')" class="floor-btn">Floor 2</button>
+                            <button onclick="sendCommand('Floor1')" class="floor-btn">Floor 1</button>
+                            <button onclick="sendCommand('GroundFloor')" class="floor-btn">Ground Floor</button>
+                        </div>
+                        <div class="control-buttons">
+                            <button onclick="sendCommand('Start')" class="control-btn start">Start</button>
+                            <button onclick="sendCommand('Stop')" class="control-btn stop">Stop</button>
+                            <button onclick="sendCommand('Continue')" class="control-btn continue">Continue</button>
+                        </div>
+                    </div>
+                    <div class="element2">
+                        <div>
+                            <h2>Received Events</h2>
+                            <button onclick="toggleAutoReload()" id="reloadButton">Stop Auto Reload</button>
+                            <div class="events-box">
+                                <ul id="events"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <script>
-        const apiUrl = "http://localhost:49570/api/simulator";
-        let autoReloadInterval;
-        let isAutoReloadEnabled = true;
+        <!-- Right panel with events -->
 
-        document.getElementById('sendForm').onsubmit = async function (e) {
-            e.preventDefault();
-            const state = document.getElementById('state').value;
 
-            const dateInput = document.getElementById('date').value;
-            const data = {
-                state: state,
-                stateChangedDate: new Date(dateInput).toISOString()
-            };
-            await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            loadEvents();
-        };
+        <script>
+            const apiUrl = "http://localhost:49570/api/simulator";
+            let autoReloadInterval;
+            let isAutoReloadEnabled = true;
 
-        async function loadEvents() {
-            const res = await fetch(apiUrl);
-            const events = await res.json();
-            const list = document.getElementById('events');
-            list.innerHTML = '';
+            document.getElementById('sendForm').onsubmit = async function (e) {
+                e.preventDefault();
+                const state = document.getElementById('state').value;
 
-            // Definim un obiect care mapează valorile numerice la numele stărilor
-            const stateNames = {
-                0: "GoingUp",
-                1: "GoingDown",
-                2: "GroundFloor",
-                3: "Floor1",
-                4: "Floor2",
-                5: "Floor3",
-                6: "Floor4",
-                7: "Stopped",
-                8: "Running",
-                9: "Wait"
+                const dateInput = document.getElementById('date').value;
+                const data = {
+                    state: state,
+                    stateChangedDate: new Date(dateInput).toISOString()
+                };
+                await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                loadEvents();
             };
 
-            events.forEach(ev => {
-                const li = document.createElement('li');
-                const stateName = stateNames[ev.state]; // Obține numele stării
-                li.textContent = `${stateName}`;
-                list.appendChild(li);
-            });
-        }
+            async function loadEvents() {
+                const res = await fetch(apiUrl);
+                const events = await res.json();
+                const list = document.getElementById('events');
+                list.innerHTML = '';
 
-        function toggleAutoReload() {
-            const button = document.getElementById('reloadButton');
-            if (isAutoReloadEnabled) {
-                clearInterval(autoReloadInterval);
-                button.textContent = "Pornește reîncărcarea automată";
-                isAutoReloadEnabled = false;
-            } else {
-                startAutoReload();
-                button.textContent = "Oprește reîncărcarea automată";
-                isAutoReloadEnabled = true;
+                // Definim un obiect care mapează valorile numerice la numele stărilor
+                const stateNames = {
+                    0: "GoingUp",
+                    1: "GoingDown",
+                    2: "GroundFloor",
+                    3: "Floor1",
+                    4: "Floor2",
+                    5: "Floor3",
+                    6: "Floor4",
+                    7: "Stopped",
+                    8: "Running",
+                    9: "Wait"
+                };
+
+                events.forEach(ev => {
+                    const li = document.createElement('li');
+                    const stateName = stateNames[ev.state]; // Obține numele stării
+                    li.textContent = `${stateName}`;
+                    list.appendChild(li);
+                });
             }
-        }
 
-        function startAutoReload() {
-            loadEvents(); // Încarcă imediat
-            autoReloadInterval = setInterval(loadEvents, 1000); // Reîncarcă la fiecare secundă
-        }
+            function toggleAutoReload() {
+                const button = document.getElementById('reloadButton');
+                if (isAutoReloadEnabled) {
+                    clearInterval(autoReloadInterval);
+                    button.textContent = "Pornește reîncărcarea automată";
+                    isAutoReloadEnabled = false;
+                } else {
+                    startAutoReload();
+                    button.textContent = "Oprește reîncărcarea automată";
+                    isAutoReloadEnabled = true;
+                }
+            }
 
-        // Pornește reîncărcarea automată la încărcarea paginii
-        startAutoReload();
-    </script>
+            function startAutoReload() {
+                loadEvents(); // Încarcă imediat
+                autoReloadInterval = setInterval(loadEvents, 1000); // Reîncarcă la fiecare secundă
+            }
+
+            // Pornește reîncărcarea automată la încărcarea paginii
+            startAutoReload();
+        </script>
 </body>
 </html>
