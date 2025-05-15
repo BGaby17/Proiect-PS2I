@@ -9,29 +9,7 @@
     <div class="container">
         <h1>Simulator API Interface</h1>
 
-        <h2>Trimite un eveniment</h2>
-        <form id="sendForm">
-            <label>
-                Stare:
-                <select id="state">
-                    <option value="GoingUp">GoingUp</option>
-                    <option value="GoingDown">GoingDown</option>
-                    <option value="GroundFloor">GroundFloor</option>
-                    <option value="Floor1">Floor1</option>
-                    <option value="Floor2">Floor2</option>
-                    <option value="Floor3">Floor3</option>
-                    <option value="Floor4">Floor4</option>
-                    <option value="Stopped">Stopped</option>
-                    <option value="Running">Running</option>
-                    <option value="Wait">Wait</option>
-                </select>
-            </label>
-            <label>doc
-                Data și ora:
-                <input type="datetime-local" id="date" required>
-            </label>
-            <button type="submit">Trimite</button>
-        </form>
+        
 
         <h2>Evenimente primite</h2>
         <button onclick="toggleAutoReload()" id="reloadButton">Oprește reîncărcarea automată</button>

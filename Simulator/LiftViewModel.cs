@@ -218,14 +218,16 @@ namespace Simulator
 
                 // Start moving from 0 to between 0 and 1
                 await Task.Delay(1000, cancellationToken);
-                ChangeProcessState(ProcessState.GoingUp, 1000);
+                ChangeProcessState(ProcessState.GoingUp, 10);
                 Lift_E0 = System.Windows.Visibility.Hidden;
 
                 if (!_Lift_E1_E0)
                 {
                     Lift_E1_E0 = System.Windows.Visibility.Visible;
                     _floor10 = true;
+                   
                     await Task.Delay(1000, cancellationToken);
+                    ChangeProcessState(ProcessState.GoingUp, 10);
                     Lift_E1_E0 = System.Windows.Visibility.Hidden;
                     _floor10 = false;
                     _floor1= true;
@@ -278,7 +280,7 @@ namespace Simulator
                 Use_E1 = System.Windows.Visibility.Hidden;
 
                 await Task.Delay(1000, cancellationToken);
-                ChangeProcessState(ProcessState.GoingUp, 1000);
+                ChangeProcessState(ProcessState.GoingUp, 10);
                 Lift_E1 = System.Windows.Visibility.Hidden;
 
                 if (!_Lift_E2_E1)
@@ -286,6 +288,7 @@ namespace Simulator
                     Lift_E2_E1 = System.Windows.Visibility.Visible;
                     _floor21 = true;
                     await Task.Delay(1000, cancellationToken);
+                    ChangeProcessState(ProcessState.GoingUp, 10);
                     Lift_E2_E1 = System.Windows.Visibility.Hidden;
                     _floor21 = false;
                     _floor2 = true;
@@ -335,7 +338,7 @@ namespace Simulator
             Use_E2 = System.Windows.Visibility.Hidden;
 
             await Task.Delay(1000, cancellationToken);
-            ChangeProcessState(ProcessState.GoingUp, 1000);
+            ChangeProcessState(ProcessState.GoingUp, 10);
             Lift_E2 = System.Windows.Visibility.Hidden;
 
             if (!_Lift_E3_E2)
@@ -343,7 +346,8 @@ namespace Simulator
                 Lift_E3_E2 = System.Windows.Visibility.Visible;
                 _floor32 = true;
                 await Task.Delay(1000, cancellationToken);
-                Lift_E3_E2 = System.Windows.Visibility.Hidden;
+                    ChangeProcessState(ProcessState.GoingUp, 10);
+                    Lift_E3_E2 = System.Windows.Visibility.Hidden;
                 _floor32 = false;
                 _floor3 = true;
             }
@@ -353,7 +357,7 @@ namespace Simulator
             Use_E4 = System.Windows.Visibility.Hidden;
             Use_E3 = System.Windows.Visibility.Visible;
 
-           // if (etaj == ProcessState.Floor3)
+            if (etaj == ProcessState.Floor3)
                 ChangeProcessState(ProcessState.Wait, 1000);
                 }
             catch(TaskCanceledException)
@@ -395,7 +399,7 @@ namespace Simulator
                 Use_E3 = System.Windows.Visibility.Hidden;
 
                 await Task.Delay(1000, cancellationToken);
-                ChangeProcessState(ProcessState.GoingUp, 1000);
+                ChangeProcessState(ProcessState.GoingUp, 10);
                 Lift_E3 = System.Windows.Visibility.Hidden;
 
                 if (!_Lift_E4_E3)
@@ -403,6 +407,7 @@ namespace Simulator
                     Lift_E4_E3 = System.Windows.Visibility.Visible;
                     _floor43 = true;
                     await Task.Delay(1000, cancellationToken);
+                    ChangeProcessState(ProcessState.GoingUp, 10);
                     Lift_E4_E3 = System.Windows.Visibility.Hidden;
                     _floor43 = false;
                     _floor4 = true;
@@ -412,7 +417,7 @@ namespace Simulator
                 await Task.Delay(1000, cancellationToken);
                 Use_E4 = System.Windows.Visibility.Visible;
 
-               // if (etaj == ProcessState.Floor4)
+                if (etaj == ProcessState.Floor4)
                     ChangeProcessState(ProcessState.Wait, 1000);
             }
             catch(TaskCanceledException)
@@ -443,7 +448,7 @@ namespace Simulator
              ButtonEnabledFloor2 = false;
              ButtonEnabledFloor3 = false;
              ButtonEnabledFloor4 = false;
-             ProcessStop = true;
+           
              _floor1 = false;
 
 
@@ -456,25 +461,29 @@ namespace Simulator
                Lift_E0 = System.Windows.Visibility.Hidden;
                Use_E1 = System.Windows.Visibility.Hidden;
                await Task.Delay(1000);
+            ChangeProcessState(ProcessState.GoingDown, 10);
 
-               Lift_E1 = System.Windows.Visibility.Hidden;
+            Lift_E1 = System.Windows.Visibility.Hidden;
               if (!_Lift_E1_E0)  // Verificăm dacă nu e deja vizibilă
                {
                    Lift_E1_E0 = System.Windows.Visibility.Visible;
                    await Task.Delay(1000);
-                   Lift_E1_E0 = System.Windows.Visibility.Hidden;
+                ChangeProcessState(ProcessState.GoingDown, 10);
+                Lift_E1_E0 = System.Windows.Visibility.Hidden;
                }
             Lift_E1_E0 = System.Windows.Visibility.Hidden;
             Lift_E0 = System.Windows.Visibility.Visible;
-               await Task.Delay(1000);
             
-             
-             
-               Use_E0 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
+          
+
+
+            Use_E0 = System.Windows.Visibility.Visible;
             ChangeProcessState(ProcessState.GroundFloor, 1000);
             Use_E4 = System.Windows.Visibility.Hidden;
                Use_E3 = System.Windows.Visibility.Hidden;
                Use_E2 = System.Windows.Visibility.Hidden;
+            ProcessStop = true;
 
         }
         private async Task floor2_down()
@@ -489,14 +498,26 @@ namespace Simulator
             Lift_E1 = System.Windows.Visibility.Hidden;
             Use_E2 = System.Windows.Visibility.Hidden;
             await Task.Delay(1000);
+            ChangeProcessState(ProcessState.GoingDown, 10);
+
             Lift_E2 = System.Windows.Visibility.Hidden;
-            Lift_E2_E1 = System.Windows.Visibility.Visible;
+            if (!_Lift_E2_E1)  // Verificăm dacă nu e deja vizibilă
+            {
+                Lift_E2_E1 = System.Windows.Visibility.Visible;
+                await Task.Delay(1000);
+                ChangeProcessState(ProcessState.GoingDown, 10);
+                Lift_E2_E1 = System.Windows.Visibility.Hidden;
+            }
+
+            Lift_E2_E1 = System.Windows.Visibility.Hidden;
+            Lift_E1 = System.Windows.Visibility.Visible;
+
             await Task.Delay(1000);
             //if(etaj==ProcessState.Floor2)
             ChangeProcessState(ProcessState.GoingDown, 1000);
-            Lift_E2_E1 = System.Windows.Visibility.Hidden;
-            Lift_E1 = System.Windows.Visibility.Visible;
-           
+            
+          //  await Task.Delay(1000);
+
         }
 
         private async Task floor3_down()
@@ -506,19 +527,20 @@ namespace Simulator
             ButtonEnabledFloor3 = false;
             ButtonEnabledFloor4 = false;
           
-            ChangeProcessState(ProcessState.GoingDown, 1000);
             _floor3 = false;
             Use_E2 = System.Windows.Visibility.Hidden;
             Lift_E2 = System.Windows.Visibility.Hidden;
             Use_E3 = System.Windows.Visibility.Hidden;
             await Task.Delay(1000);
+            ChangeProcessState(ProcessState.GoingDown, 10);
             Lift_E3 = System.Windows.Visibility.Hidden;
             Lift_E3_E2 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
            // if (etaj == ProcessState.Floor3)
-                ChangeProcessState(ProcessState.GoingDown, 1000);
+                ChangeProcessState(ProcessState.GoingDown, 10);
             Lift_E3_E2 = System.Windows.Visibility.Hidden;
             Lift_E2 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
 
         }
 
@@ -529,18 +551,21 @@ namespace Simulator
             ButtonEnabledFloor3 = false;
             ButtonEnabledFloor4 = false;
             ProcessStop = true;
+         //   ChangeProcessState(ProcessState.GoingDown, 1000);
             _floor4 = false;
             Use_E3 = System.Windows.Visibility.Hidden;
             Lift_E3 = System.Windows.Visibility.Hidden;
             Use_E4 = System.Windows.Visibility.Hidden;
             await Task.Delay(1000);
+            ChangeProcessState(ProcessState.GoingDown, 10);
             Lift_E4 = System.Windows.Visibility.Hidden;
             Lift_E4_E3 = System.Windows.Visibility.Visible;
             await Task.Delay(1000);
-            if (etaj == ProcessState.Floor3)
-                ChangeProcessState(ProcessState.GoingDown, 1000);
+           // if (etaj == ProcessState.Floor3)
+                ChangeProcessState(ProcessState.GoingDown, 10);
             Lift_E4_E3 = System.Windows.Visibility.Hidden;
             Lift_E3 = System.Windows.Visibility.Visible;
+            await Task.Delay(1000);
 
         }
 
@@ -583,8 +608,10 @@ namespace Simulator
           else if (_floor43 == true && ProcessStart == false && ProcessContinue == true)
             {
                 _floor43 = false;
+
                 Lift_E4_E3 = System.Windows.Visibility.Hidden;
                 Lift_E3 = System.Windows.Visibility.Visible;
+                ChangeProcessState(ProcessState.GoingDown, 10);
                 // await Task.Delay(1000);
                 await floor3_down();
                 await floor2_down();
@@ -603,6 +630,7 @@ namespace Simulator
                 _floor32 = false;
                 Lift_E3_E2 = System.Windows.Visibility.Hidden;
                 Lift_E2 = System.Windows.Visibility.Visible;
+                ChangeProcessState(ProcessState.GoingDown, 10);
                 // await Task.Delay(1000);
                 await floor2_down();
                 await floor1_down();
@@ -619,8 +647,9 @@ namespace Simulator
                 _floor21 = false;
                 Lift_E2_E1 = System.Windows.Visibility.Hidden;
                 Lift_E1 = System.Windows.Visibility.Visible;
+                ChangeProcessState(ProcessState.GoingDown, 10);
                 // await Task.Delay(1000);
-              //  await floor2_down();
+                //  await floor2_down();
                 await floor1_down();
                // TheStateOfTheProcess = ProcessState.Running;
             }
