@@ -247,3 +247,11 @@ select, input {
     .circle.active {
         background-color: green; /* devine verde când activ */
     }
+
+.monitor-box {
+    border: 2px solid #333;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f3f3f3;
+    width: fit-content;
+}
