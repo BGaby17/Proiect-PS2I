@@ -12,6 +12,13 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+}
+.container1 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .events-box {
@@ -227,3 +234,16 @@ select, input {
     padding: 8px;
     border-bottom: 1px solid #eee;
 }
+
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red; /* implicit roșu */
+    margin: auto;
+}
+
+    .circle.active {
+        background-color: green; /* devine verde când activ */
+    }
