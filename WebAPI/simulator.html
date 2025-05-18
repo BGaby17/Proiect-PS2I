@@ -92,75 +92,83 @@
         targetPosition = null;
         let currentPosition = 0; // Poziția curentă a liftului (0 = Parter, 1 = Etaj 1, etc.)
         let floorText = "Parter";
-       async function setElevatorPosition(event)
-       {
+        let lastGoingUpId = null; // Ultimul ID procesat pentru GoingUp
+        let lastGoingDownId = null; // Ultimul ID procesat pentru GoingDown
 
-           if (currentPosition < 3)
-               await sleep(1000); // Așteaptă 1 secundă
-           else
-               await sleep(2500);
-          //  console.log("new"+events_new);
-           // console.log("old"+event_old);
+        async function setElevatorPosition(event) {
             const floorSpan = document.getElementById('currentFloor');
-           
-           
-                switch (event.state) {
-                    case 2: // GroundFloor
-                        currentPosition = 0;
-                        targetPosition = 0;
-                       floorText = "Parter";
-                        break;
-                    case 3: // Floor1
-                        targetPosition=1
-                        currentPosition = 0;
-                       // floorText = "Spre etaj 1";
-                        break;
-                    case 4: // Floor2
-                        targetPosition = 2;
-                        currentPosition = 0;
-                   //    floorText = "spre etaj 2";
-                        break;
-                    case 5: // Floor3
-                        targetPosition = 3;
-                        currentPosition = 0;
-                       // floorText = "Etaj 3";
-                        break;
-                    case 6: // Floor4
-                        currentPosition = 0;
-                        targetPosition = 4;
-                      //  floorText = "Etaj 4";
-                        break;
-                    case 0: // GoingUp
-                        if (currentPosition < targetPosition) {
-                            currentPosition += 0.5; // Urcăm la poziția intermediară sau următorul etaj
-                        }
-                        floorText = `Între etajul ${Math.floor(currentPosition)} și ${Math.ceil(currentPosition)}`;
-                        break;
-                    case 1: // GoingDown
-                        if (currentPosition > targetPosition) {
-                            currentPosition -= 0.5; // Coborâm la poziția intermediară sau etajul anterior
-                        }
-                        break;
-                    case 7: // Stopped
-                        floorText = "Oprit";
-                        break;
-                    case 8: // Running
-                        targetPosition = 0;
-                        floorText = "În funcțiune";
-                        break;
-                    case 9: // Wait
-                        floorText = `Așteaptă`;
-                        break;
-                    default:
-                       floorText = "necunoscut";
-                       // console.log(event.state);
-                        break;
-                }
-            
-            event_old = events_new;
+          
 
+            // Verificăm dacă evenimentul este duplicat pentru GoingUp sau GoingDown
+            if (event.state === 0 && event.id === lastGoingUpId) {
+                return; // Ignorăm evenimentul GoingUp dacă ID-ul este același
+            }
+            if (event.state === 1 && event.id === lastGoingDownId) {
+                return; // Ignorăm evenimentul GoingDown dacă ID-ul este același
+            }
+
+            // Procesăm evenimentul
+            switch (event.state) {
+                case 2: // GroundFloor
+                    currentPosition = 0;
+                    targetPosition = 0;
+                    floorText = "Parter";
+                    break;
+                case 3: // Floor1
+                    targetPosition = 1;
+                    currentPosition = 0;
+                    floorText = "Etaj 1";
+                    break;
+                case 4: // Floor2
+                    targetPosition = 2;
+                    currentPosition = 0;
+                    floorText = "Etaj 2";
+                    break;
+                case 5: // Floor3
+                    targetPosition = 3;
+                    currentPosition = 0;
+                    floorText = "Etaj 3";
+                    break;
+                case 6: // Floor4
+                    currentPosition = 0;
+                    targetPosition = 4;
+                    floorText = "Etaj 4";
+                    break;
+                case 0: // GoingUp
+                    if (currentPosition < targetPosition) {
+                        currentPosition += 0.5; // Urcăm la poziția intermediară sau următorul etaj
+                    }
+                    floorText = `Între etajul ${Math.floor(currentPosition)} și ${Math.ceil(currentPosition)}`;
+                    lastGoingUpId = event.id; // Actualizăm ultimul ID procesat pentru GoingUp
+                    break;
+                case 1: // GoingDown
+                    if (currentPosition > targetPosition) {
+                        currentPosition -= 0.5; // Coborâm la poziția intermediară sau etajul anterior
+                    }
+                    floorText = `Între etajul ${Math.ceil(currentPosition)} și ${Math.floor(currentPosition)}`;
+                    lastGoingDownId = event.id; // Actualizăm ultimul ID procesat pentru GoingDown
+                    break;
+                case 7: // Stopped
+                    floorText = "Oprit";
+                    break;
+                case 8: // Running
+                    targetPosition = 0;
+                    floorText = "În funcțiune";
+                    break;
+                case 9: // Wait
+                    floorText = `Așteaptă`;
+                    break;
+                default:
+                    floorText = "necunoscut";
+                    console.log(event.state);
+                    break;
+            }
+
+            // Actualizăm afișajul
             floorSpan.textContent = floorText;
         }
+
+
 
 
 
