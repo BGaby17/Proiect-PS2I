@@ -41,6 +41,7 @@ namespace Simulator
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private bool IsContinuePressed = false;
         private Sender _aplicatieMonitorizareRetea;
+        private bool first = true;
         public void Init()
         {
             _aplicatieMonitorizareRetea = new Sender("127.0.0.1", 3000);
@@ -473,13 +474,25 @@ namespace Simulator
                }
             Lift_E1_E0 = System.Windows.Visibility.Hidden;
             Lift_E0 = System.Windows.Visibility.Visible;
-            
-            await Task.Delay(1000);
-          
+
+            if (first)
+            {
+                await Task.Delay(1000);
+                ChangeProcessState(ProcessState.GoingDown, 10);
+                first = false;
+            }
+
+            else
+            {
+                await Task.Delay(1000);
+                ChangeProcessState(ProcessState.GoingDown, 10);
+
+            }
 
 
             Use_E0 = System.Windows.Visibility.Visible;
-            ChangeProcessState(ProcessState.GroundFloor, 1000);
+           // ChangeProcessState(ProcessState.GroundFloor, 1000);
+            ForceNextState(ProcessState.GroundFloor);
             Use_E4 = System.Windows.Visibility.Hidden;
                Use_E3 = System.Windows.Visibility.Hidden;
                Use_E2 = System.Windows.Visibility.Hidden;
