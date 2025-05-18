@@ -255,3 +255,22 @@ select, input {
     background-color: #f3f3f3;
     width: fit-content;
 }
+
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red; /* implicit roșu */
+
+
+    margin: auto;
+}
+
+
+
+
+
+    .circle.active {
+        background-color: green; /* devine verde când activ */
+    }

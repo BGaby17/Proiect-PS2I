@@ -11,7 +11,71 @@
 
 
     <div class="container">
+        <div class="container">
 
+
+
+            <table id="elevatorTable" border="1">
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th>Etaj</th>
+
+
+                        <th>Status</th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <!-- Parter și etaje intermediare -->
+
+
+                    <tr><td>Etaj 4</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Între 3 și 4</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Etaj 3</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Între 2 și 3</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Etaj 2</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Între 1 și 2</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Etaj 1</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Între P și 1</td><td><div class="circle"></div></td></tr>
+
+
+                    <tr><td>Parter</td><td><div class="circle active"></div></td></tr>
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
 
 
         <h2>Received Events</h2>
@@ -66,7 +130,8 @@
             if (events.length > 0) {
                 const lastEvent = events[events.length - 1];
                 const lastState = stateNames[lastEvent.state];
-                setElevatorPosition(lastEvent);
+                  setElevatorPosition(lastEvent);
+
 
             }
         }
@@ -113,6 +178,7 @@
                     currentPosition = 0;
                     targetPosition = 0;
                     floorText = "Parter";
+                    
                     break;
                 case 3: // Floor1
                     targetPosition = 1;
@@ -140,6 +206,7 @@
                     }
                     floorText = `Între etajul ${Math.floor(currentPosition)} și ${Math.ceil(currentPosition)}`;
                     lastGoingUpId = event.id; // Actualizăm ultimul ID procesat pentru GoingUp
+                    setElevatorPosition_draw("GoingUp");
                     break;
                 case 1: // GoingDown
                     if (currentPosition > targetPosition) {
@@ -147,6 +214,7 @@
                     }
                     floorText = `Între etajul ${Math.ceil(currentPosition)} și ${Math.floor(currentPosition)}`;
                     lastGoingDownId = event.id; // Actualizăm ultimul ID procesat pentru GoingDown
+                    setElevatorPosition_draw("GoingDown");
                     break;
                 case 7: // Stopped
                     floorText = "Oprit";
@@ -169,7 +237,76 @@
         }
 
 
+ 
 
+
+        function setElevatorPosition_draw(state) {
+
+
+            const circles = document.querySelectorAll('.circle');
+
+
+
+
+
+            // Reacționăm doar la GoingUp și GoingDown
+
+
+            if (state === 'GoingUp') {
+
+
+                // Găsim primul cerc inactiv de jos în sus și îl activăm
+
+
+                for (let i = circles.length - 1; i >= 0; i--) {
+
+
+                    if (!circles[i].classList.contains('active')) {
+
+
+                        circles[i].classList.add('active');
+
+
+                        break;
+
+
+                    }
+
+                }
+
+            }
+
+
+            else if (state === 'GoingDown') {
+
+
+                // Găsim primul cerc activ de sus în jos și îl dezactivăm
+
+
+                for (let i = 0; i < circles.length; i++) {
+
+
+                    if (circles[i].classList.contains('active')) {
+
+
+                        circles[i].classList.remove('active');
+
+
+                        break;
+
+
+                    }
+
+
+                }
+
+            }
+
+
+            // Pentru alte stări, nu facem nimic
+
+
+        }
 
 
 
