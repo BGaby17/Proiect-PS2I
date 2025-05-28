@@ -45,28 +45,35 @@ namespace Simulator
         public void Init()
         {
             _aplicatieMonitorizareRetea = new Sender("127.0.0.1", 3000);
-          timer.Elapsed += _timer_Elapsed;
+            timer.Elapsed += _timer_Elapsed;
             worker.DoWork += _worker_DoWork;
-             worker.RunWorkerAsync();
+            worker.RunWorkerAsync();
           
             Lift_E0 = System.Windows.Visibility.Visible;
             Use_E0 = System.Windows.Visibility.Visible;
             ProcesStart = false;
             ProcessStop = true;
             ProcessContinue = true;
-            ButtonEnabledFloor1 = true;
-            ButtonEnabledFloor2 = true;
-            ButtonEnabledFloor3 = true;
-            ButtonEnabledFloor4 = true;
+            Button_Enabled_Floor(true);
         }
+
+        void Button_Enabled_Floor(bool val)
+        {
+            ButtonEnabledFloor1 = val;
+            ButtonEnabledFloor2 = val;
+            ButtonEnabledFloor3 = val;
+            ButtonEnabledFloor4 = val;
+        }
+
         public async Task CancelTasks()
         {
             _cancellationTokenSource.Cancel();
-            if (_floor4 == true  ) { 
+            if (_floor4 == true  ) 
+            { 
                 await Task.Delay(1000);
-            Use_E4 = System.Windows.Visibility.Visible;
+                Use_E4 = System.Windows.Visibility.Visible;
             }
-           else if(_floor3 == true  && _floor43==false)
+            else if(_floor3 == true  && _floor43==false)
             {
                 await Task.Delay(1000);
                 Use_E3 = System.Windows.Visibility.Visible;
@@ -121,16 +128,9 @@ namespace Simulator
             ProcessStart = true;
             ProcessStop = false ;
             ProcessContinue = false;
-            ButtonEnabledFloor1 = false;
-            ButtonEnabledFloor2 = false;
-            ButtonEnabledFloor3 = false;
-            ButtonEnabledFloor4 = false;
+            Button_Enabled_Floor(false);
 
         }
-
-      
-
-       
 
         public ProcessState TheStateOfTheProcess
         {
@@ -169,21 +169,16 @@ namespace Simulator
         private ProcessState _currentStateOfTheProcess = ProcessState.Wait;
         private async void _worker_DoWork(object sender, DoWorkEventArgs e)
         {
-           
-
             while (true)
             {
                 await ComputeNextState(TheStateOfTheProcess);
-                
+                System.Threading.Thread.Sleep(100);
             }
         }
-
-
 
         private bool _floor0=false, _floor1 = false, _floor2 = false, _floor3 = false, _floor4 = false, _floor21 = false, _floor32 = false, _floor10 = false, _floor43 = false; // cu astea verific la ce etaj sunt inainte de apasa pe s5
         private void groundFloor()
         {
-          
             Lift_E4 = System.Windows.Visibility.Hidden;
             Lift_E4_E3 = System.Windows.Visibility.Hidden;
             Lift_E3 = System.Windows.Visibility.Hidden;
@@ -199,16 +194,14 @@ namespace Simulator
             Use_E2 = System.Windows.Visibility.Hidden;
             Use_E1 = System.Windows.Visibility.Hidden;
             Use_E0 = System.Windows.Visibility.Visible;
+            ChangeProcessState(ProcessState.Wait, 1000);
         }
         private async Task floor1(CancellationToken cancellationToken)
         {
             try
             {
                 _floor0 = false;
-                ButtonEnabledFloor1 = false;
-                ButtonEnabledFloor2 = false;
-                ButtonEnabledFloor3 = false;
-                ButtonEnabledFloor4 = false;
+                Button_Enabled_Floor(false);
                 Lift_E4 = System.Windows.Visibility.Hidden;
                 Lift_E4_E3 = System.Windows.Visibility.Hidden;
                 Lift_E3 = System.Windows.Visibility.Hidden;
@@ -267,10 +260,7 @@ namespace Simulator
             try
             {
                 _floor1 = false;
-                ButtonEnabledFloor1 = false;
-                ButtonEnabledFloor2 = false;
-                ButtonEnabledFloor3 = false;
-                ButtonEnabledFloor4 = false;
+                Button_Enabled_Floor(false);
 
                 Lift_E4 = System.Windows.Visibility.Hidden;
                 Lift_E4_E3 = System.Windows.Visibility.Hidden;
@@ -306,9 +296,6 @@ namespace Simulator
             }
             catch (TaskCanceledException)
             {
-
-
-
                 if (ProcessStop)
                 {
                     // Preserve intermediate shaft if stopped between floors
@@ -319,53 +306,47 @@ namespace Simulator
                     // await stopped();
                     ForceNextState(ProcessState.Stopped);
                 }
-
             }
         }
 
         private async Task floor3(CancellationToken cancellationToken)
         {
-            try { 
-            _floor2 = false;   ///
-            ButtonEnabledFloor1 = false;
-            ButtonEnabledFloor2 = false;
-            ButtonEnabledFloor3 = false;
-            ButtonEnabledFloor4 = false;
+            try 
+            { 
+                _floor2 = false;   ///
+                Button_Enabled_Floor(false);
 
-            Lift_E4 = System.Windows.Visibility.Hidden;
-            Lift_E4_E3 = System.Windows.Visibility.Hidden;
-          //  Lift_E3 = System.Windows.Visibility.Hidden;
-            Lift_E3_E2 = System.Windows.Visibility.Hidden;
-            Use_E2 = System.Windows.Visibility.Hidden;
+                Lift_E4 = System.Windows.Visibility.Hidden;
+                Lift_E4_E3 = System.Windows.Visibility.Hidden;
+            //  Lift_E3 = System.Windows.Visibility.Hidden;
+                Lift_E3_E2 = System.Windows.Visibility.Hidden;
+                Use_E2 = System.Windows.Visibility.Hidden;
 
-            await Task.Delay(1000, cancellationToken);
-            ChangeProcessState(ProcessState.GoingUp, 10);
-            Lift_E2 = System.Windows.Visibility.Hidden;
-
-            if (!_Lift_E3_E2)
-            {
-                Lift_E3_E2 = System.Windows.Visibility.Visible;
-                _floor32 = true;
                 await Task.Delay(1000, cancellationToken);
+                ChangeProcessState(ProcessState.GoingUp, 10);
+                Lift_E2 = System.Windows.Visibility.Hidden;
+
+                if (!_Lift_E3_E2)
+                {
+                    Lift_E3_E2 = System.Windows.Visibility.Visible;
+                    _floor32 = true;
+                    await Task.Delay(1000, cancellationToken);
                     ChangeProcessState(ProcessState.GoingUp, 10);
                     Lift_E3_E2 = System.Windows.Visibility.Hidden;
-                _floor32 = false;
-                _floor3 = true;
-            }
-
-            Lift_E3 = System.Windows.Visibility.Visible;
-            await Task.Delay(1000, cancellationToken);
-            Use_E4 = System.Windows.Visibility.Hidden;
-            Use_E3 = System.Windows.Visibility.Visible;
-
-            if (etaj == ProcessState.Floor3)
-                ChangeProcessState(ProcessState.Wait, 1000);
+                    _floor32 = false;
+                    _floor3 = true;
                 }
+
+                Lift_E3 = System.Windows.Visibility.Visible;
+                await Task.Delay(1000, cancellationToken);
+                Use_E4 = System.Windows.Visibility.Hidden;
+                Use_E3 = System.Windows.Visibility.Visible;
+
+                if (etaj == ProcessState.Floor3)
+                    ChangeProcessState(ProcessState.Wait, 1000);
+            }
             catch(TaskCanceledException)
             {
-
-
-
                 if (ProcessStop)
                 {
                     // Preserve intermediate shaft if stopped between floors
@@ -376,23 +357,15 @@ namespace Simulator
                     // await stopped();
                     ForceNextState(ProcessState.Stopped);
                 }
-
-
-
             }
         }
-
-
 
         private async Task floor4(CancellationToken cancellationToken)
         {
             try
             {
                 _floor3 = false;
-                ButtonEnabledFloor1 = false;
-                ButtonEnabledFloor2 = false;
-                ButtonEnabledFloor3 = false;
-                ButtonEnabledFloor4 = false;
+                Button_Enabled_Floor(false);
 
                 Lift_E4 = System.Windows.Visibility.Hidden;
                 Lift_E4_E3 = System.Windows.Visibility.Hidden;
@@ -423,8 +396,6 @@ namespace Simulator
             }
             catch(TaskCanceledException)
             {
-
-
                 if (ProcessStop)
                 {
                     // Preserve intermediate shaft if stopped between floors
@@ -435,43 +406,35 @@ namespace Simulator
                     // await stopped();
                     ForceNextState(ProcessState.Stopped);
                 }
-
             }
         }
 
         ProcessState etaj;
         private async Task floor1_down()
         {
-
+            Button_Enabled_Floor(false);
            
+            _floor1 = false;
 
-             ButtonEnabledFloor1 = false;
-             ButtonEnabledFloor2 = false;
-             ButtonEnabledFloor3 = false;
-             ButtonEnabledFloor4 = false;
-           
-             _floor1 = false;
-
-
-               Lift_E4 = System.Windows.Visibility.Hidden;
-               Lift_E4_E3 = System.Windows.Visibility.Hidden;
-               Lift_E3 = System.Windows.Visibility.Hidden;
-               Lift_E3_E2 = System.Windows.Visibility.Hidden;
-               Lift_E2 = System.Windows.Visibility.Hidden;
-               Lift_E2_E1 = System.Windows.Visibility.Hidden;
-               Lift_E0 = System.Windows.Visibility.Hidden;
-               Use_E1 = System.Windows.Visibility.Hidden;
-               await Task.Delay(1000);
+            Lift_E4 = System.Windows.Visibility.Hidden;
+            Lift_E4_E3 = System.Windows.Visibility.Hidden;
+            Lift_E3 = System.Windows.Visibility.Hidden;
+            Lift_E3_E2 = System.Windows.Visibility.Hidden;
+            Lift_E2 = System.Windows.Visibility.Hidden;
+            Lift_E2_E1 = System.Windows.Visibility.Hidden;
+            Lift_E0 = System.Windows.Visibility.Hidden;
+            Use_E1 = System.Windows.Visibility.Hidden;
+            await Task.Delay(1000);
             ChangeProcessState(ProcessState.GoingDown, 10);
 
             Lift_E1 = System.Windows.Visibility.Hidden;
-              if (!_Lift_E1_E0)  // Verificăm dacă nu e deja vizibilă
-               {
-                   Lift_E1_E0 = System.Windows.Visibility.Visible;
-                   await Task.Delay(1000);
-                ChangeProcessState(ProcessState.GoingDown, 10);
-                Lift_E1_E0 = System.Windows.Visibility.Hidden;
-               }
+                if (!_Lift_E1_E0)  // Verificăm dacă nu e deja vizibilă
+                {
+                    Lift_E1_E0 = System.Windows.Visibility.Visible;
+                    await Task.Delay(1000);
+                    ChangeProcessState(ProcessState.GoingDown, 10);
+                    Lift_E1_E0 = System.Windows.Visibility.Hidden;
+                }
             Lift_E1_E0 = System.Windows.Visibility.Hidden;
             Lift_E0 = System.Windows.Visibility.Visible;
 
@@ -481,30 +444,23 @@ namespace Simulator
                 ChangeProcessState(ProcessState.GoingDown, 10);
                 first = false;
             }
-
             else
             {
                 await Task.Delay(1000);
                 ChangeProcessState(ProcessState.GoingDown, 10);
-
             }
-
 
             Use_E0 = System.Windows.Visibility.Visible;
            // ChangeProcessState(ProcessState.GroundFloor, 1000);
             ForceNextState(ProcessState.GroundFloor);
             Use_E4 = System.Windows.Visibility.Hidden;
-               Use_E3 = System.Windows.Visibility.Hidden;
-               Use_E2 = System.Windows.Visibility.Hidden;
+            Use_E3 = System.Windows.Visibility.Hidden;
+            Use_E2 = System.Windows.Visibility.Hidden;
             ProcessStop = true;
-
         }
         private async Task floor2_down()
         {
-            ButtonEnabledFloor1 = false;
-            ButtonEnabledFloor2 = false;
-            ButtonEnabledFloor3 = false;
-            ButtonEnabledFloor4 = false;
+            Button_Enabled_Floor(false);
            
             _floor2 = false;
             Use_E1 = System.Windows.Visibility.Hidden;
@@ -535,10 +491,7 @@ namespace Simulator
 
         private async Task floor3_down()
         {
-            ButtonEnabledFloor1 = false;
-            ButtonEnabledFloor2 = false;
-            ButtonEnabledFloor3 = false;
-            ButtonEnabledFloor4 = false;
+            Button_Enabled_Floor(false);
           
             _floor3 = false;
             Use_E2 = System.Windows.Visibility.Hidden;
@@ -559,10 +512,8 @@ namespace Simulator
 
         private async Task floor4_down()
         {
-            ButtonEnabledFloor1 = false;
-            ButtonEnabledFloor2 = false;
-            ButtonEnabledFloor3 = false;
-            ButtonEnabledFloor4 = false;
+            Button_Enabled_Floor(false);
+
             ProcessStop = true;
          //   ChangeProcessState(ProcessState.GoingDown, 1000);
             _floor4 = false;
@@ -582,10 +533,8 @@ namespace Simulator
 
         }
 
-       
         public async Task running()
         {
-          
             if (Use_E4==Visibility.Visible)
             {
                 await floor4_down();
@@ -614,11 +563,9 @@ namespace Simulator
                 await floor4_down();
                 await floor3_down();
                 await floor2_down();
-                await floor1_down();
-                
+                await floor1_down();    
             }
-            
-          else if (_floor43 == true && ProcessStart == false && ProcessContinue == true)
+            else if (_floor43 == true && ProcessStart == false && ProcessContinue == true)
             {
                 _floor43 = false;
 
@@ -676,44 +623,28 @@ namespace Simulator
                 await floor1_down();
                 //TheStateOfTheProcess = ProcessState.Running;
             }
-            else
-                   if (_floor1 == true && ProcessStart == false && ProcessContinue == true)
+            else if (_floor1 == true && ProcessStart == false && ProcessContinue == true)
             {
                 await floor1_down();
-
-               
-
-
-
             }
 
             ProcessStart = false;
-            ButtonEnabledFloor1 = true;
-            ButtonEnabledFloor2 = true;
-            ButtonEnabledFloor3 = true;
-            ButtonEnabledFloor4 = true;
-        
+            Button_Enabled_Floor(true);
+
         }
         public async Task stopped()
         {
           //  ProcessStop = true;
             ProcessContinue = true; // Dezactivăm Continue până la apăsare
-            ButtonEnabledFloor1 = false;
-            ButtonEnabledFloor2 = false;
-            ButtonEnabledFloor3 = false;
-            ButtonEnabledFloor4 = false;
+            Button_Enabled_Floor(false);
 
             // Așteaptă până când butonul Continue este apăsat
             while (!ProcessContinue) ;
            
-
-
             // După apăsarea butonului Continue
             IsContinuePressed = false;
             ProcessContinue = true;
             ProcessStop = false;
-
-           
 
             ChangeProcessState(ProcessState.Wait, 1000);
         }
@@ -722,7 +653,6 @@ namespace Simulator
             IsContinuePressed = true;
         }
        
-
         public async Task ComputeNextState(ProcessState CurrentState)
         {
 
@@ -733,15 +663,15 @@ namespace Simulator
             {
 
                 case ProcessState.Wait:
-                   ////// deci aici nush cum sa fac , ar trebui sa ramane in starea de asteptare pana la urmatoare comanda,
-                   ///nu stiu cum sa foloses changeprocessstate uul
-                   ///
+                    ChangeProcessState(ProcessState.Wait, 1000);
                     break;
                 case ProcessState.Stopped:
 
                     // aici nush cum sa gestionez situatia  ca e destul de nasta sa te bagi peste procesul in curs
                     //  ProcessStart = true;
                   // ChangeProcessState(ProcessState.Stopped, 1000);
+
+
                     await   stopped();
                     break;
 

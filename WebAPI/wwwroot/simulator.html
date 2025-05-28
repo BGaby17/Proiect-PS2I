@@ -6,90 +6,72 @@
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
-    <h1>Elevator Simulator</h1>
-
 
 
     <div class="container">
-        <div class="container">
 
+        <div class="information">
+            <h1>Received Events</h1>
+            <button onclick="toggleAutoReload()" id="reloadButton">Stop Auto Reload</button>
+            <div class="events-box">
+                <ul id="events"></ul>
+            </div>
+        </div>
 
+        <div class="table_lift">
+
+            <h1>Elevator Simulator</h1>
 
             <table id="elevatorTable" border="1">
 
-
                 <thead>
-
 
                     <tr>
 
-
                         <th>Etaj</th>
-
 
                         <th>Status</th>
 
-
                     </tr>
-
 
                 </thead>
 
-
                 <tbody>
-
 
                     <!-- Parter și etaje intermediare -->
 
-
                     <tr><td>Etaj 4</td><td><div class="circle"></div></td></tr>
-
 
                     <tr><td>Între 3 și 4</td><td><div class="circle"></div></td></tr>
 
-
                     <tr><td>Etaj 3</td><td><div class="circle"></div></td></tr>
-
 
                     <tr><td>Între 2 și 3</td><td><div class="circle"></div></td></tr>
 
-
                     <tr><td>Etaj 2</td><td><div class="circle"></div></td></tr>
-
 
                     <tr><td>Între 1 și 2</td><td><div class="circle"></div></td></tr>
 
-
                     <tr><td>Etaj 1</td><td><div class="circle"></div></td></tr>
-
 
                     <tr><td>Între P și 1</td><td><div class="circle"></div></td></tr>
 
-
                     <tr><td>Parter</td><td><div class="circle active"></div></td></tr>
-
 
                 </tbody>
 
-
             </table>
 
-
         </div>
 
-
-        <h2>Received Events</h2>
-        <button onclick="toggleAutoReload()" id="reloadButton">Stop Auto Reload</button>
-        <div class="events-box">
-            <ul id="events"></ul>
+        <div class="status">
+            <div class="monitor-box">
+                <h2>Monitorizare Etaj</h2>
+                <p>Etaj curent: <span id="currentFloor">necunoscut</span></p>
+            </div>
         </div>
-    </div>
 
-    <div class="monitor-box">
-        <h2>Monitorizare Etaj</h2>
-        <p>Etaj curent: <span id="currentFloor">necunoscut</span></p>
     </div>
-
 
     <script>
         const apiUrl = "http://localhost:49570/api/simulator";
@@ -127,29 +109,39 @@
                 li.textContent = `${stateName}`;
                 list.appendChild(li);
             });
-            if (events.length > 0) {
+
+            // Auto-scroll to bottom
+            const eventsBox = document.querySelector('.events-box');
+            eventsBox.scrollTop = eventsBox.scrollHeight;
+
+            if (events.length > 0) 
+            {
                 const lastEvent = events[events.length - 1];
                 const lastState = stateNames[lastEvent.state];
                   setElevatorPosition(lastEvent);
 
-
             }
         }
 
-        function toggleAutoReload() {
+        function toggleAutoReload() 
+        {
             const button = document.getElementById('reloadButton');
-            if (isAutoReloadEnabled) {
+            if (isAutoReloadEnabled) 
+            {
                 clearInterval(autoReloadInterval);
                 button.textContent = "Pornește reîncărcarea automată";
                 isAutoReloadEnabled = false;
-            } else {
+            } 
+            else 
+            {
                 startAutoReload();
                 button.textContent = "Oprește reîncărcarea automată";
                 isAutoReloadEnabled = true;
             }
         }
 
-        function sleep(ms) {
+        function sleep(ms) 
+        {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
@@ -160,20 +152,24 @@
         let lastGoingUpId = null; // Ultimul ID procesat pentru GoingUp
         let lastGoingDownId = null; // Ultimul ID procesat pentru GoingDown
 
-        async function setElevatorPosition(event) {
+        async function setElevatorPosition(event) 
+        {
             const floorSpan = document.getElementById('currentFloor');
           
 
             // Verificăm dacă evenimentul este duplicat pentru GoingUp sau GoingDown
-            if (event.state === 0 && event.id === lastGoingUpId) {
+            if (event.state === 0 && event.id === lastGoingUpId) 
+            {
                 return; // Ignorăm evenimentul GoingUp dacă ID-ul este același
             }
-            if (event.state === 1 && event.id === lastGoingDownId) {
+            if (event.state === 1 && event.id === lastGoingDownId) 
+            {
                 return; // Ignorăm evenimentul GoingDown dacă ID-ul este același
             }
 
             // Procesăm evenimentul
-            switch (event.state) {
+            switch (event.state) 
+            {
                 case 2: // GroundFloor
                     currentPosition = 0;
                     targetPosition = 0;
@@ -201,7 +197,8 @@
                     floorText = "Etaj 4";
                     break;
                 case 0: // GoingUp
-                    if (currentPosition < targetPosition) {
+                    if (currentPosition < targetPosition) 
+                    {
                         currentPosition += 0.5; // Urcăm la poziția intermediară sau următorul etaj
                     }
                     floorText = `Între etajul ${Math.floor(currentPosition)} și ${Math.ceil(currentPosition)}`;
@@ -209,7 +206,8 @@
                     setElevatorPosition_draw("GoingUp");
                     break;
                 case 1: // GoingDown
-                    if (currentPosition > targetPosition) {
+                    if (currentPosition > targetPosition) 
+                    {
                         currentPosition -= 0.5; // Coborâm la poziția intermediară sau etajul anterior
                     }
                     floorText = `Între etajul ${Math.ceil(currentPosition)} și ${Math.floor(currentPosition)}`;
@@ -236,94 +234,50 @@
             floorSpan.textContent = floorText;
         }
 
-
- 
-
-
-        function setElevatorPosition_draw(state) {
-
-
+        function setElevatorPosition_draw(state) 
+        {
             const circles = document.querySelectorAll('.circle');
-
-
-
-
 
             // Reacționăm doar la GoingUp și GoingDown
 
-
-            if (state === 'GoingUp') {
-
-
+            if (state === 'GoingUp') 
+            {
                 // Găsim primul cerc inactiv de jos în sus și îl activăm
 
-
-                for (let i = circles.length - 1; i >= 0; i--) {
-
-
-                    if (!circles[i].classList.contains('active')) {
-
-
+                for (let i = circles.length - 1; i >= 0; i--) 
+                {
+                    if (!circles[i].classList.contains('active')) 
+                    {
                         circles[i].classList.add('active');
-
-
                         break;
-
-
                     }
-
                 }
-
             }
-
-
-            else if (state === 'GoingDown') {
-
-
+            else if (state === 'GoingDown') 
+            {
                 // Găsim primul cerc activ de sus în jos și îl dezactivăm
 
-
-                for (let i = 0; i < circles.length; i++) {
-
-
-                    if (circles[i].classList.contains('active')) {
+                for (let i = 0; i <= circles.length; i++) {
 
 
+                    if (circles[i].classList.contains('active')) 
+                    {
                         circles[i].classList.remove('active');
-
-
                         break;
-
-
                     }
-
-
                 }
-
             }
-
-
             // Pentru alte stări, nu facem nimic
-
-
         }
 
-
-
-        function startAutoReload() {
+        function startAutoReload() 
+        {
             loadEvents(); // Încarcă imediat
             autoReloadInterval = setInterval(loadEvents, 1000); // Reîncarcă la fiecare secundă
         }
 
         // Pornește reîncărcarea automată la încărcarea paginii
         startAutoReload();
-
-
-
-
-
-
-
     </script>
 </body>
 </html>
