@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Elevator Simulator</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+
+    <div class="container">
+
+        <div class="information">
+            <h1>Received Events</h1>
+            <button onclick="toggleAutoReload()" id="reloadButton">Stop Auto Reload</button>
+            <div class="events-box">
+                <ul id="events"></ul>
+            </div>
+        </div>
+
+        <div class="table_lift">
+
+            <h1>Elevator Simulator</h1>
+
+            <table id="elevatorTable" border="1">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Etaj</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <!-- Parter și etaje intermediare -->
+
+                    <tr><td>Etaj 4</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Între 3 și 4</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Etaj 3</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Între 2 și 3</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Etaj 2</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Între 1 și 2</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Etaj 1</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Între P și 1</td><td><div class="circle"></div></td></tr>
+
+                    <tr><td>Parter</td><td><div class="circle active"></div></td></tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="status">
+            <div class="monitor-box">
+                <h2>Monitorizare Etaj</h2>
+                <p>Etaj curent: <span id="currentFloor">necunoscut</span></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const apiUrl = "http://localhost:49570/api/simulator";
+        let autoReloadInterval;
+        let isAutoReloadEnabled = true;
+        events_new = null;
+        event_old = null;
+
+
+        async function loadEvents() {
+            const res = await fetch(apiUrl);
+            const events = await res.json();
+            const list = document.getElementById('events');
+            list.innerHTML = '';
+           
+            // Definim un obiect care mapează valorile numerice la numele stărilor
+            const stateNames = {
+                0: "GoingUp",
+                1: "GoingDown",
+                2: "GroundFloor",
+                3: "Floor1",
+                4: "Floor2",
+                5: "Floor3",
+                6: "Floor4",
+                7: "Stopped",
+                8: "Running",
+                9: "Wait"
+            };
+
+            events.forEach(ev => {
+                const li = document.createElement('li');
+                const stateName = stateNames[ev.state]; // Obține numele stării
+                events_new = ev;
+                //  console.log(stateName)
+                li.textContent = `${stateName}`;
+                list.appendChild(li);
+            });
+
+            // Auto-scroll to bottom
+            const eventsBox = document.querySelector('.events-box');
+            eventsBox.scrollTop = eventsBox.scrollHeight;
+
+            if (events.length > 0) 
+            {
+                const lastEvent = events[events.length - 1];
+                const lastState = stateNames[lastEvent.state];
+                  setElevatorPosition(lastEvent);
+
+            }
+        }
+
+        function toggleAutoReload() 
+        {
+            const button = document.getElementById('reloadButton');
+            if (isAutoReloadEnabled) 
+            {
+                clearInterval(autoReloadInterval);
+                button.textContent = "Pornește reîncărcarea automată";
+                isAutoReloadEnabled = false;
+            } 
+            else 
+            {
+                startAutoReload();
+                button.textContent = "Oprește reîncărcarea automată";
+                isAutoReloadEnabled = true;
+            }
+        }
+
+        function sleep(ms) 
+        {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+
+        targetPosition = null;
+        let currentPosition = 0; // Poziția curentă a liftului (0 = Parter, 1 = Etaj 1, etc.)
+        let floorText = "Parter";
+        let lastGoingUpId = null; // Ultimul ID procesat pentru GoingUp
+        let lastGoingDownId = null; // Ultimul ID procesat pentru GoingDown
+
+        async function setElevatorPosition(event) 
+        {
+            const floorSpan = document.getElementById('currentFloor');
+          
+
+            // Verificăm dacă evenimentul este duplicat pentru GoingUp sau GoingDown
+            if (event.state === 0 && event.id === lastGoingUpId) 
+            {
+                return; // Ignorăm evenimentul GoingUp dacă ID-ul este același
+            }
+            if (event.state === 1 && event.id === lastGoingDownId) 
+            {
+                return; // Ignorăm evenimentul GoingDown dacă ID-ul este același
+            }
+
+            // Procesăm evenimentul
+            switch (event.state) 
+            {
+                case 2: // GroundFloor
+                    currentPosition = 0;
+                    targetPosition = 0;
+                    floorText = "Parter";
+                    
+                    break;
+                case 3: // Floor1
+                    targetPosition = 1;
+                    currentPosition = 0;
+                    floorText = "Etaj 1";
+                    break;
+                case 4: // Floor2
+                    targetPosition = 2;
+                    currentPosition = 0;
+                    floorText = "Etaj 2";
+                    break;
+                case 5: // Floor3
+                    targetPosition = 3;
+                    currentPosition = 0;
+                    floorText = "Etaj 3";
+                    break;
+                case 6: // Floor4
+                    currentPosition = 0;
+                    targetPosition = 4;
+                    floorText = "Etaj 4";
+                    break;
+                case 0: // GoingUp
+                    if (currentPosition < targetPosition) 
+                    {
+                        currentPosition += 0.5; // Urcăm la poziția intermediară sau următorul etaj
+                    }
+                    floorText = `Între etajul ${Math.floor(currentPosition)} și ${Math.ceil(currentPosition)}`;
+                    lastGoingUpId = event.id; // Actualizăm ultimul ID procesat pentru GoingUp
+                    setElevatorPosition_draw("GoingUp");
+                    break;
+                case 1: // GoingDown
+                    if (currentPosition > targetPosition) 
+                    {
+                        currentPosition -= 0.5; // Coborâm la poziția intermediară sau etajul anterior
+                    }
+                    floorText = `Între etajul ${Math.ceil(currentPosition)} și ${Math.floor(currentPosition)}`;
+                    lastGoingDownId = event.id; // Actualizăm ultimul ID procesat pentru GoingDown
+                    setElevatorPosition_draw("GoingDown");
+                    break;
+                case 7: // Stopped
+                    floorText = "Oprit";
+                    break;
+                case 8: // Running
+                    targetPosition = 0;
+                    floorText = "În funcțiune";
+                    break;
+                case 9: // Wait
+                    floorText = `Așteaptă`;
+                    break;
+                default:
+                    floorText = "necunoscut";
+                    console.log(event.state);
+                    break;
+            }
+
+            // Actualizăm afișajul
+            floorSpan.textContent = floorText;
+        }
+
+        function setElevatorPosition_draw(state) 
+        {
+            const circles = document.querySelectorAll('.circle');
+
+            // Reacționăm doar la GoingUp și GoingDown
+
+            if (state === 'GoingUp') 
+            {
+                // Găsim primul cerc inactiv de jos în sus și îl activăm
+
+                for (let i = circles.length - 1; i >= 0; i--) 
+                {
+                    if (!circles[i].classList.contains('active')) 
+                    {
+                        circles[i].classList.add('active');
+                        break;
+                    }
+                }
+            }
+            else if (state === 'GoingDown') 
+            {
+                // Găsim primul cerc activ de sus în jos și îl dezactivăm
+
+                for (let i = 0; i <= circles.length; i++) {
+
+
+                    if (circles[i].classList.contains('active')) 
+                    {
+                        circles[i].classList.remove('active');
+                        break;
+                    }
+                }
+            }
+            // Pentru alte stări, nu facem nimic
+        }
+
+        function startAutoReload() 
+        {
+            loadEvents(); // Încarcă imediat
+            autoReloadInterval = setInterval(loadEvents, 1000); // Reîncarcă la fiecare secundă
+        }
+
+        // Pornește reîncărcarea automată la încărcarea paginii
+        startAutoReload();
+    </script>
+</body>
+</html>

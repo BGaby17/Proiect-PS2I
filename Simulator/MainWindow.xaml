@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Simulator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
-    <Grid>
-        <local:Lift Margin="0,0,60,50">
+        Title="MainWindow" Height="825" Width="673">
+    <Grid Margin="0,0,0,-7">
+        <local:Lift Margin="0,0,0,50">
             
         </local:Lift>
     </Grid>

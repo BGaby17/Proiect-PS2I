@@ -16,7 +16,8 @@ namespace DateModel
         Floor3,
         Floor4,
         Stopped,
-        Running
+        Running,
+        Wait
     }
 
 }

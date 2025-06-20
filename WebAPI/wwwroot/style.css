@@ -1,0 +1,295 @@
+﻿/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.container
+{
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   padding: 20px;
+   gap: 50px; 
+}
+
+.information
+{
+    flex: 2;
+}
+
+.table_lift
+{
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    gap: 30px;
+}
+
+#elevatorTable
+{
+    width: 250px;
+    height: 300px;
+}
+
+.status
+{
+    flex: 1;
+    margin-top: 110px;
+}
+
+
+.events-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+#events {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+    #events li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+        #events li:hover {
+            background-color: #f5f5f5;
+        }
+
+button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+form {
+    margin: 20px 0;
+}
+
+label {
+    display: block;
+    margin: 10px 0;
+}
+
+select, input {
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 200px;
+}
+
+
+.layout {
+    display: flex;
+    gap: 40px;
+}
+
+.left-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.building {
+    width: 200px;
+    height: 600px;
+    border: 2px solid #333;
+    position: relative;
+    background: #f0f0f0;
+    margin-bottom: 20px;
+}
+
+.floor {
+    height: 80px;
+    border-bottom: 2px solid #333;
+    position: relative;
+}
+
+.between-floors {
+    height: 40px;
+    background-color: #e0e0e0;
+    position: relative;
+}
+
+.floor-label {
+    position: absolute;
+    left: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+}
+
+.door {
+    width: 40px;
+    height: 60px;
+    background: #666; /* Ușă închisă */
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background-color 0.3s;
+}
+
+.door.open {
+    background: #4CAF50; /* Ușă deschisă */
+}
+
+.elevator {
+    width: 50px;
+    height: 70px;
+    background: #2196F3;
+    position: absolute;
+    right: 15px;
+    bottom: 5px;
+    transition: bottom 1s ease-in-out;
+}
+
+.elevator-door {
+    width: 40px;
+    height: 60px;
+    background: #333;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    transition: background-color 0.3s;
+}
+
+.elevator-door.open {
+    background: #4CAF50;
+}
+
+/* Pozițiile liftului */
+.elevator.floor0 { bottom: 5px; }
+.elevator.floor1 { bottom: 125px; }
+.elevator.floor2 { bottom: 245px; }
+.elevator.floor3 { bottom: 365px; }
+.elevator.floor4 { bottom: 485px; }
+
+/* Pozițiile între etaje */
+.elevator.between10 { bottom: 65px; }
+.elevator.between21 { bottom: 185px; }
+.elevator.between32 { bottom: 305px; }
+.elevator.between43 { bottom: 425px; }
+
+/* Stiluri pentru butoane */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.floor-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.floor-btn {
+    padding: 10px;
+    font-size: 16px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.control-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.start { background: #4CAF50; color: white; }
+.stop { background: #f44336; color: white; }
+.continue { background: #FF9800; color: white; }
+
+/* Stiluri pentru evenimente */
+.events-box {
+    width: 550px;
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+#events {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#events li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red; /* implicit roșu */
+    margin: auto;
+}
+
+    .circle.active {
+        background-color: green; /* devine verde când activ */
+    }
+
+.monitor-box {
+    max-width: 400px;
+    border: 2px solid #333;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f3f3f3;
+    width: fit-content;
+}
+
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red; /* implicit roșu */
+
+
+    margin: auto;
+}
+
+
+
+
+
+    .circle.active {
+        background-color: green; /* devine verde când activ */
+    }
